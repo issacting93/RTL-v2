@@ -1,0 +1,15 @@
+{
+  "name": "@research-tools/monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @research-tools/sample-app",
+    "build": "npm run build -w packages/*"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vite": "^6.0.0"
+  }
+}
