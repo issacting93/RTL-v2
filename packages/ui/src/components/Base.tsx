@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { glassStyle, theme } from './theme';
+import { glassStyle, theme } from '../theme';
 
 interface CardProps {
   children: React.ReactNode;
