@@ -1,9 +1,11 @@
-/**
- * @research-tools/ui
- * High-fidelity UI components for qualitative coding and conversation analysis.
- */
-
-export * from './theme';
-export * from './components/Base';
-export * from './components/TranscriptViewer';
-export * from './components/AnnotationDesk';
+export * from './theme.ts';
+export * from './components/Base.tsx';
+export * from './components/TranscriptViewer.tsx';
+export * from './components/AnnotationDesk.tsx';
+export * from './components/Badge.tsx';
+export * from './components/KPICard.tsx';
+export * from './components/BarDistribution.tsx';
+export * from './components/DataTable.tsx';
+export * from './components/CompactSelector.tsx';
+export * from './components/ControlPanel.tsx';
+export * from './components/ItemInspector.tsx';
