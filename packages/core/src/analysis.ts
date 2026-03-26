@@ -1,18 +1,25 @@
-import { DataItem, Segment, CountEntry, TransitionMatrix, Conversation } from './types.ts';
+import { Segment, CountEntry, TransitionMatrix, Conversation } from './types';
 
 /** Count occurrences of a key across items. */
-export function countsBy<T extends DataItem>(items: T[], key: string): Record<string, number> {
+export function countsBy<T extends Record<string, unknown>>(
+  items: T[],
+  key: keyof T & string
+): Record<string, number> {
   const out: Record<string, number> = {};
   for (const item of items) {
     const v = item[key];
     if (v === undefined || v === null || v === '') continue;
-    out[v] = (out[v] || 0) + 1;
+    const s = String(v);
+    out[s] = (out[s] || 0) + 1;
   }
   return out;
 }
 
 /** Find the most-frequent value for a given key. */
-export function dominantValue<T extends DataItem>(items: T[], key: string): string | null {
+export function dominantValue<T extends Record<string, unknown>>(
+  items: T[],
+  key: keyof T & string
+): string | null {
   const counts = countsBy(items, key);
   const pairs = Object.entries(counts);
   if (!pairs.length) return null;
@@ -28,17 +35,20 @@ export function sortCounts(counts: Record<string, number>): CountEntry[] {
 }
 
 /** Segment a sorted sequence by a categorical key (run-length encoding). */
-export function makeSegments<T extends DataItem>(items: T[], key: string): Segment[] {
+export function makeSegments<T extends Record<string, unknown>>(
+  items: T[],
+  key: keyof T & string
+): Segment<T>[] {
   if (!items.length) return [];
-  const segments: Segment[] = [];
-  let current: Segment = { value: items[0][key], start: 0, end: 0, items: [items[0]] };
+  const segments: Segment<T>[] = [];
+  let current: Segment<T> = { value: String(items[0][key]), start: 0, end: 0, items: [items[0]] };
   for (let i = 1; i < items.length; i++) {
-    if (items[i][key] === current.value) {
+    if (String(items[i][key]) === current.value) {
       current.end = i;
       current.items.push(items[i]);
     } else {
       segments.push(current);
-      current = { value: items[i][key], start: i, end: i, items: [items[i]] };
+      current = { value: String(items[i][key]), start: i, end: i, items: [items[i]] };
     }
   }
   segments.push(current);
@@ -55,14 +65,15 @@ export function boundaryPairs(segments: Segment[]): string[] {
 }
 
 /** Compute an NxN transition matrix from sequences keyed by `key`. */
-export function computeTransitionMatrix<T extends DataItem>(
+export function computeTransitionMatrix<T extends Record<string, unknown>>(
   sequences: T[][],
-  key: string
+  key: keyof T & string
 ): TransitionMatrix {
   const labelSet = new Set<string>();
   for (const seq of sequences) {
     for (const item of seq) {
-      if (item[key]) labelSet.add(item[key]);
+      const v = item[key];
+      if (v !== undefined && v !== null) labelSet.add(String(v));
     }
   }
   const labels = Array.from(labelSet).sort();
@@ -71,8 +82,8 @@ export function computeTransitionMatrix<T extends DataItem>(
 
   for (const seq of sequences) {
     for (let i = 1; i < seq.length; i++) {
-      const from = indexMap.get(seq[i - 1][key]);
-      const to = indexMap.get(seq[i][key]);
+      const from = indexMap.get(String(seq[i - 1][key]));
+      const to = indexMap.get(String(seq[i][key]));
       if (from !== undefined && to !== undefined) matrix[from][to]++;
     }
   }
@@ -97,8 +108,11 @@ export function calculateConversationMetrics(conversation: Conversation) {
 }
 
 /** Extract unique values of a key across items. */
-export function uniqueValues<T extends DataItem>(items: T[], key: string): string[] {
-  return Array.from(new Set(items.map(i => i[key]).filter(Boolean)));
+export function uniqueValues<T extends Record<string, unknown>>(
+  items: T[],
+  key: keyof T & string
+): string[] {
+  return Array.from(new Set(items.map(i => i[key]).filter(Boolean).map(String)));
 }
 
 /** Turn sequence string (e.g. "UAUA"). */

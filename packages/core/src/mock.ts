@@ -1,4 +1,4 @@
-import { Message, Conversation, TaxonomyDimension, Taxonomy, HeatmapCell } from './types.ts';
+import { Message, Conversation, TaxonomyDimension, Taxonomy, HeatmapCell } from './types';
 
 // ── Default taxonomy ────────────────────────────────────────────
 

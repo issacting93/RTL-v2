@@ -1,5 +1,5 @@
 import React from 'react';
-import { theme } from '../theme.ts';
+import { theme } from '../theme';
 
 interface BarDistributionProps {
   data: { label: string; count: number; color?: string }[];
@@ -33,7 +33,7 @@ export const BarDistribution: React.FC<BarDistributionProps> = ({ data, title })
               <div style={{
                 flex: 1,
                 height: '8px',
-                background: 'rgba(255,255,255,0.05)',
+                background: '#f1f5f9',
                 borderRadius: '4px',
                 overflow: 'hidden',
               }}>

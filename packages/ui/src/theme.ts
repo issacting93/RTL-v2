@@ -1,30 +1,51 @@
+// ── Bloom Design System Tokens ──────────────────────────────────
+
 export const theme = {
   colors: {
-    primary: '#6366f1', // Indigo
-    secondary: '#ec4899', // Pink
-    accent: '#10b981', // Emerald
-    background: '#0f172a', // Slate 900
-    surface: 'rgba(30, 41, 59, 0.7)', // Glass surface
+    primary: '#6366f1',    // Indigo
+    secondary: '#ec4899',  // Pink
+    accent: '#22c55e',     // Green
+    background: '#ffffff',
+    backgroundSubtle: '#f8f8f8',
+    surface: '#ffffff',
     text: {
-      primary: '#f8fafc',
-      secondary: '#94a3b8',
+      primary: '#1a1a1a',
+      secondary: '#888888',
     },
-    border: 'rgba(255, 255, 255, 0.1)',
+    border: '#e5e5e5',
+    yellow: '#f5c542',
+    orange: '#e85a3c',
+    purple: '#8b5cf6',
   },
-  blur: 'backdrop-blur-lg',
   shadows: {
-    glass: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+    sm: '0 2px 8px rgba(0, 0, 0, 0.05)',
+    md: '0 4px 12px rgba(0, 0, 0, 0.1)',
+  },
+  radius: {
+    sm: '8px',
+    md: '12px',
+    lg: '16px',
+    xl: '24px',
   },
   gradients: {
     premium: 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)',
-    surface: 'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0))',
-  }
+  },
 };
 
-export const glassStyle = {
+/** Standard card container style for UI components. */
+export const cardStyle = {
   background: theme.colors.surface,
-  backdropFilter: 'blur(12px)',
   border: `1px solid ${theme.colors.border}`,
-  boxShadow: theme.shadows.glass,
-  borderRadius: '16px',
+  borderRadius: theme.radius.lg,
+  boxShadow: theme.shadows.sm,
+};
+
+/** Standard card container style for viz/chart wrappers. */
+export const vizCardStyle = {
+  background: theme.colors.surface,
+  borderRadius: theme.radius.lg,
+  padding: '24px',
+  border: `1px solid ${theme.colors.border}`,
+  boxShadow: theme.shadows.sm,
+  overflow: 'hidden' as const,
 };

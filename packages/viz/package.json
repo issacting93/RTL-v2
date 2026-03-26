@@ -12,7 +12,8 @@
     "d3": "^7.0.0"
   },
   "dependencies": {
-    "@research-tools/core": "*"
+    "@research-tools/core": "*",
+    "@research-tools/ui": "*"
   },
   "devDependencies": {
     "typescript": "^5.0.0",

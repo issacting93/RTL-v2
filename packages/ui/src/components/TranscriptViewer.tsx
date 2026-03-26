@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { theme } from '../theme.ts';
+import { theme } from '../theme';
 import { Message } from '@research-tools/core';
 
 interface TranscriptViewerProps {
@@ -9,10 +9,10 @@ interface TranscriptViewerProps {
   highlightedId?: string;
 }
 
-export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({ 
-  messages, 
+export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
+  messages,
   onMessageClick,
-  highlightedId 
+  highlightedId
 }) => {
   return (
     <div style={{ padding: '0 10px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -28,7 +28,7 @@ export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
             maxWidth: '80%',
             padding: '12px 16px',
             borderRadius: '12px',
-            background: m.speaker === 'user' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(99, 102, 241, 0.15)',
+            background: m.speaker === 'user' ? theme.colors.backgroundSubtle : 'rgba(99, 102, 241, 0.1)',
             border: highlightedId === m.id ? `2px solid ${theme.colors.primary}` : `1px solid ${theme.colors.border}`,
             cursor: onMessageClick ? 'pointer' : 'default',
           }}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { glassStyle, theme } from '../theme';
+import { cardStyle, theme } from '../theme';
 
 interface CardProps {
   children: React.ReactNode;
@@ -9,7 +9,7 @@ interface CardProps {
 }
 
 /**
- * A premium glassmorphism card container.
+ * A card container with subtle shadow and border.
  */
 export const GlassCard: React.FC<CardProps> = ({ children, title, className }) => {
   return (
@@ -17,12 +17,12 @@ export const GlassCard: React.FC<CardProps> = ({ children, title, className }) =
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      style={{ ...glassStyle, padding: '20px' }}
+      style={{ ...cardStyle, padding: '20px' }}
       className={className}
     >
       {title && (
-        <h3 style={{ 
-          color: theme.colors.text.primary, 
+        <h3 style={{
+          color: theme.colors.text.primary,
           marginBottom: '16px',
           fontSize: '1.25rem',
           fontWeight: 600,
@@ -38,8 +38,8 @@ export const GlassCard: React.FC<CardProps> = ({ children, title, className }) =
   );
 };
 
-export const PremiumButton: React.FC<{ 
-  onClick: () => void; 
+export const PremiumButton: React.FC<{
+  onClick: () => void;
   children: React.ReactNode;
   variant?: 'primary' | 'secondary';
 }> = ({ onClick, children, variant = 'primary' }) => {
@@ -51,7 +51,7 @@ export const PremiumButton: React.FC<{
       style={{
         background: variant === 'primary' ? theme.gradients.premium : 'transparent',
         border: variant === 'primary' ? 'none' : `1px solid ${theme.colors.primary}`,
-        color: theme.colors.text.primary,
+        color: variant === 'primary' ? '#ffffff' : theme.colors.primary,
         padding: '10px 20px',
         borderRadius: '8px',
         cursor: 'pointer',

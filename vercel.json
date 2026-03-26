@@ -1,0 +1,5 @@
+{
+  "buildCommand": "npm run build --workspace=@research-tools/sample-app",
+  "outputDirectory": "packages/sample-app/dist",
+  "framework": "vite"
+}

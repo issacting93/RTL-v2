@@ -1,18 +1,18 @@
 import React, { useMemo } from 'react';
 
-interface RoleRibbonSegment {
+interface TimelineSegment {
   value: string;
   count: number;
   color: string;
 }
 
-interface RoleRibbonProps {
-  segments: RoleRibbonSegment[];
+interface SequenceTimelineProps {
+  segments: TimelineSegment[];
   height?: number;
   showLabels?: boolean;
 }
 
-export const RoleRibbon: React.FC<RoleRibbonProps> = ({
+export const SequenceTimeline: React.FC<SequenceTimelineProps> = ({
   segments,
   height = 32,
   showLabels = true,

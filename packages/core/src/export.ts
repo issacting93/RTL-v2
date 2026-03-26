@@ -15,12 +15,18 @@ export function exportPng(svgElement: SVGSVGElement, filename = 'figure.png', sc
   const w = vb[2] * scale;
   const h = vb[3] * scale;
 
+  const svgUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
   const img = new Image();
+
   img.onload = () => {
     const canvas = document.createElement('canvas');
     canvas.width = w;
     canvas.height = h;
-    const ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      console.error('exportPng: failed to get canvas 2d context');
+      return;
+    }
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, w, h);
     ctx.drawImage(img, 0, 0, w, h);
@@ -28,7 +34,12 @@ export function exportPng(svgElement: SVGSVGElement, filename = 'figure.png', sc
       if (blob) triggerDownload(blob, filename);
     }, 'image/png');
   };
-  img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+
+  img.onerror = () => {
+    console.error('exportPng: failed to load SVG as image — the SVG may contain invalid markup or external references');
+  };
+
+  img.src = svgUrl;
 }
 
 /** Export a JSON object as a downloadable file. */

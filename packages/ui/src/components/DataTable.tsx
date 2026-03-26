@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { theme } from '../theme.ts';
+import { theme } from '../theme';
 
 interface Column {
   key: string;
@@ -63,7 +63,7 @@ export const DataTable: React.FC<DataTableProps> = ({
             width: '100%',
             padding: '8px 12px',
             marginBottom: '12px',
-            background: 'rgba(255,255,255,0.05)',
+            background: theme.colors.backgroundSubtle,
             border: `1px solid ${theme.colors.border}`,
             borderRadius: '8px',
             color: theme.colors.text.primary,

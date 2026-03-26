@@ -63,7 +63,7 @@
 
 | Component | Source(s) | Description |
 |-----------|-----------|-------------|
-| **AnnotationDesk** | Existing UI, Annotation Desk (SeekerFirstForm) | Dynamic form with field schema → text, select, boolean, multi-tag, slider |
+| **CodingForm** | Existing UI, Annotation Desk (SeekerFirstForm) | Dynamic form with field schema → text, select, boolean, multi-tag, slider |
 | **CompactSelector** | Annotation Desk | Single-select button group with tooltip definitions |
 | **TagSelector** | Annotation Desk | Multi-select pill chips |
 | **ConfidenceSlider** | Annotation Desk | Labelled range input (Low / Med / High) |
@@ -77,16 +77,16 @@
 
 | Component | Source(s) | Description |
 |-----------|-----------|-------------|
-| **RadialLayout** | Existing viz, Role Dynamics | Circular plot: angle=time, distance=metric, color=category |
+| **TopologyNetwork** | Existing viz, Role Dynamics | Circular plot: angle=time, distance=metric, color=category |
 | **ConcentricRings** | Role Dynamics | SVG background rings with labels |
 | **ConnectionLines** | Role Dynamics | Lines between consecutive nodes |
-| **TransitionFlow** | AROMA Findings | Circular node-link diagram showing NxN transition counts |
+| **StateTransitionFlow** | AROMA Findings | Circular node-link diagram showing NxN transition counts |
 
 #### Matrix / Grid
 
 | Component | Source(s) | Description |
 |-----------|-----------|-------------|
-| **Heatmap** | Existing viz (D2xD3) | Row x Col heatmap with D3 colour scale |
+| **CooccurrenceMatrix** | Existing viz (D2xD3) | Row x Col heatmap with D3 colour scale |
 | **PositionHeatmap** | AROMA Findings | Tier x Position grid showing intensity per bin |
 | **MosaicPlot** | AROMA Findings | Area-proportional tiles with residual colouring |
 
@@ -94,7 +94,7 @@
 
 | Component | Source(s) | Description |
 |-----------|-----------|-------------|
-| **RoleRibbon** | AROMA Sequence Explorer | Segmented horizontal bar showing category runs over time |
+| **SequenceTimeline** | AROMA Sequence Explorer | Segmented horizontal bar showing category runs over time |
 | **MultiTrackTimeline** | AROMA Sequence Explorer | Parallel tracks (D1/D2/D3 etc.) per unit, clickable |
 
 #### Corpus Overview
@@ -121,7 +121,7 @@
 
 | Pattern | Where it appears | Generalised as |
 |---------|-----------------|----------------|
-| Transcript + sidebar coding | Annotation Desk, Sequence Explorer | `SplitPane` + `TranscriptViewer` + `AnnotationDesk` |
+| Transcript + sidebar coding | Annotation Desk, Sequence Explorer | `SplitPane` + `TranscriptViewer` + `CodingForm` |
 | Three-column research layout | Sequence Explorer, Corpus Map, Atlas Explorer | `AppShell` with left sidebar, workspace, right inspector |
 | KPI row → distribution bars → detail table | Atlas Dashboard, AROMA Findings, Turning Point | `KPIGrid` → `BarDistribution` → `DataTable` |
 | Role/category colour coding | All 4 projects | `Taxonomy` type + `colorFor()` + `Badge` / `Pill` |

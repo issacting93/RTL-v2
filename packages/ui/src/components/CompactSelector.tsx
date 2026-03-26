@@ -1,5 +1,5 @@
 import React from 'react';
-import { theme } from '../theme.ts';
+import { theme } from '../theme';
 
 interface CompactSelectorProps {
   label: string;
@@ -39,8 +39,8 @@ export const CompactSelector: React.FC<CompactSelectorProps> = ({
               padding: '6px 12px',
               fontSize: '12px',
               borderRadius: '6px',
-              border: `1px solid ${theme.colors.border}`,
-              background: selected === opt ? theme.colors.text.primary : 'rgba(255,255,255,0.05)',
+              border: `1px solid ${selected === opt ? theme.colors.text.primary : theme.colors.border}`,
+              background: selected === opt ? theme.colors.text.primary : theme.colors.backgroundSubtle,
               color: selected === opt ? theme.colors.background : theme.colors.text.primary,
               cursor: 'pointer',
               flex: '1 0 calc(50% - 6px)',

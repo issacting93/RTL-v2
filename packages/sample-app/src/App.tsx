@@ -3,7 +3,7 @@ import {
   theme,
   GlassCard,
   TranscriptViewer,
-  AnnotationDesk,
+  CodingForm,
   PremiumButton,
   Badge,
   KPIGrid,
@@ -15,12 +15,12 @@ import {
   ItemInspector,
 } from '@research-tools/ui';
 import {
-  RadialLayout,
-  D2xD3Heatmap,
-  RoleRibbon,
+  TopologyNetwork,
+  CooccurrenceMatrix,
+  SequenceTimeline,
   MultiTrackTimeline,
   DocumentPortrait,
-  TransitionFlow,
+  StateTransitionFlow,
 } from '@research-tools/viz';
 import {
   generateMockDataset,
@@ -35,24 +35,168 @@ import {
   type Conversation,
   type Message,
 } from '@research-tools/core';
+import { Book, Layout, BarChart, Component, MousePointer, FlaskConical, Type } from 'lucide-react';
+import { CorpusAudit } from './templates/CorpusAudit';
+import { SequenceExplorer } from './templates/SequenceExplorer';
+import { StructuralDiagnostic } from './templates/StructuralDiagnostic';
+import { AffectivePortrait } from './templates/AffectivePortrait';
+import { RoleTransitionLab } from './templates/RoleTransitionLab';
+import { CalibrationSuite } from './templates/CalibrationSuite';
+import { MOCK_GRAPH_DATA } from './templates/mockData';
 
 // ── Generate dummy data ─────────────────────────────────────────
 const CONVERSATIONS = generateMockDataset(5, 16);
 const HEATMAP = generateMockHeatmap();
 
-type TabId = 'overview' | 'annotate' | 'corpus' | 'findings';
+type ComponentId = 
+  | 'welcome' 
+  | 'radial-layout' 
+  | 'transition-flow' 
+  | 'heatmap' 
+  | 'transcript' 
+  | 'annotation' 
+  | 'datatable' 
+  | 'kpi-grid'
+  | 'document-portrait'
+  | 'multi-track'
+  | 'tpl-corpus'
+  | 'tpl-sequence'
+  | 'tpl-structural'
+  | 'tpl-affective'
+  | 'tpl-transition'
+  | 'tpl-calibration';
+
+interface Story {
+  id: ComponentId;
+  label: string;
+  category: 'Viz' | 'UI' | 'Overview' | 'Templates';
+  description: string;
+  useCase: string;
+}
+
+const STORIES: Story[] = [
+  { 
+    id: 'welcome', 
+    label: 'Introduction', 
+    category: 'Overview', 
+    description: 'Welcome to the Research Tool Library (RTL).',
+    useCase: 'Explore the high-fidelity component suite for qualitative research.'
+  },
+  { 
+    id: 'tpl-corpus', 
+    label: 'Dataset Overview', 
+    category: 'Templates', 
+    description: 'High-level analytical view of an entire interactional dataset.',
+    useCase: 'Analyzing multi-dimensional flows and statistical independence across thousands of turns.'
+  },
+  { 
+    id: 'tpl-sequence', 
+    label: 'Conversation Explorer', 
+    category: 'Templates', 
+    description: 'Deep-dive micro-analysis of a single conversation sequence.',
+    useCase: 'Inspecting turn-by-turn dynamics and dimensional co-occurrence in a specific case.'
+  },
+  { 
+    id: 'tpl-structural', 
+    label: 'Interaction Stability', 
+    category: 'Templates', 
+    description: 'Identifying and analyzing interactional rule violations and repairs.',
+    useCase: 'Diagnosing when and where social constraints are broken and how they are recovered.'
+  },
+  { 
+    id: 'tpl-affective', 
+    label: 'Emotional Dynamics', 
+    category: 'Templates', 
+    description: 'Synchronized tracking of emotional dimensions and participation.',
+    useCase: 'Studying the emotional pulse and power dynamics of a Human-AI session.'
+  },
+  { 
+    id: 'tpl-transition', 
+    label: 'Participant Dynamics', 
+    category: 'Templates', 
+    description: 'Evolution of participant behavior and alignment patterns.',
+    useCase: 'Visualizing how participant roles and behaviors shift over the course of an interaction.'
+  },
+  { 
+    id: 'tpl-calibration', 
+    label: 'Annotation Workspace', 
+    category: 'Templates', 
+    description: 'Integrated protocol for human annotation and batch management.',
+    useCase: 'Managing human ground-truth tasks and high-fidelity annotation forms.'
+  },
+  { 
+    id: 'radial-layout', 
+    label: 'Topology Network', 
+    category: 'Viz', 
+    description: 'A circular conversation portrait mapping time to angle and metrics to distance.',
+    useCase: 'Visualizing turn-taking dynamics and tension shifts over the course of a single interaction.'
+  },
+  { 
+    id: 'transition-flow', 
+    label: 'State Transition Flow', 
+    category: 'Viz', 
+    description: 'Sankey-inspired diagram showing transitions between categorical states (e.g., roles).',
+    useCase: 'Analyzing the "flow" of a conversation—how participants shift between strategies or roles.'
+  },
+  { 
+    id: 'heatmap', 
+    label: 'Cooccurrence Matrix', 
+    category: 'Viz', 
+    description: 'Relational heatmap visualizing tactical co-occurrence across dimensions.',
+    useCase: 'Identifying cross-dimensional correlations, such as which strategies are most common for a specific role.'
+  },
+  { 
+    id: 'transcript', 
+    label: 'Transcript Viewer', 
+    category: 'UI', 
+    description: 'High-fidelity chat transcript with speaker-aware styling and click-to-select.',
+    useCase: 'Core interface for reading and qualitative coding of conversation data.'
+  },
+  { 
+    id: 'annotation', 
+    label: 'Coding Form', 
+    category: 'UI', 
+    description: 'Dynamic coding form with support for varied field types (Select, Tagging, Range).',
+    useCase: 'Standardizing human annotation workflows and high-fidelity data entry.'
+  },
+  { 
+    id: 'datatable', 
+    label: 'Research Table', 
+    category: 'UI', 
+    description: 'Sortable, searchable data table for corpus-level metadata.',
+    useCase: 'Filtering and selecting specific conversations for deeper analysis.'
+  },
+  { 
+    id: 'kpi-grid', 
+    label: 'KPI Metrics', 
+    category: 'UI', 
+    description: 'Dashboard-style metrics grid for aggregate statistics.',
+    useCase: 'Providing high-level summaries of corpus distributions and turn counts.'
+  },
+  { 
+    id: 'document-portrait', 
+    label: 'Document Portrait', 
+    category: 'Viz', 
+    description: '"Barcode" style visualization of role distribution across multiple documents.',
+    useCase: 'Comparing structural patterns across a large corpus of conversations at a glance.'
+  },
+  { 
+    id: 'multi-track', 
+    label: 'Multi-Track Timeline', 
+    category: 'Viz', 
+    description: 'Parallel temporal tracks for different analytical dimensions.',
+    useCase: 'Inspecting co-occurrence of D1 (Intention), D2 (Role), and D3 (Strategy) in real-time.'
+  },
+];
 
 export default function App() {
-  const [tab, setTab] = useState<TabId>('overview');
+  const [activeStoryId, setActiveStoryId] = useState<ComponentId>('welcome');
   const [activeConv, setActiveConv] = useState<Conversation>(CONVERSATIONS[0]);
   const [activeMsg, setActiveMsg] = useState<string | undefined>();
-  const [viewMode, setViewMode] = useState('radial');
-  const [selectedRole, setSelectedRole] = useState('');
-  const [selectedStrategies, setSelectedStrategies] = useState<string[]>([]);
-
-  const metrics = useMemo(() => calculateConversationMetrics(activeConv), [activeConv]);
-
+  
   // ── Derived data for viz ────────────────────────────────────
+  const metrics = useMemo(() => calculateConversationMetrics(activeConv), [activeConv]);
+  
   const roleCounts = useMemo(() => {
     const raw = countsBy(
       activeConv.messages.map(m => ({ id: m.id, role: m.role || 'Unknown' })),
@@ -65,15 +209,6 @@ export default function App() {
     }));
   }, [activeConv]);
 
-  const ribbonSegments = useMemo(() => {
-    const items = activeConv.messages.map(m => ({ id: m.id, role: m.role || 'Unknown' }));
-    return makeSegments(items, 'role').map(seg => ({
-      value: seg.value,
-      count: seg.items.length,
-      color: colorFor(DEFAULT_TAXONOMY, 'd2', seg.value),
-    }));
-  }, [activeConv]);
-
   const multiTracks = useMemo(() => {
     const dims = ['d1', 'd2', 'd3'] as const;
     return dims.map(dim => {
@@ -83,11 +218,11 @@ export default function App() {
         label: dim.toUpperCase(),
         cells: activeConv.messages.map(m => {
           const val = m.metadata?.[dim] || 'Unknown';
-          return {
-            value: val,
-            color: colorFor(DEFAULT_TAXONOMY, dim, val),
-            tooltip: `${dimDef.label}: ${val}`,
-          };
+            return {
+              value: String(val),
+              color: colorFor(DEFAULT_TAXONOMY, dim, val as string),
+              tooltip: `${dimDef.label}: ${val}`,
+            };
         }),
       };
     });
@@ -98,14 +233,6 @@ export default function App() {
       c.messages.map(m => ({ id: m.id, role: m.role || 'Unknown' }))
     );
     return computeTransitionMatrix(sequences, 'role');
-  }, []);
-
-  const transitionColorMap = useMemo(() => {
-    const map: Record<string, string> = {};
-    for (const cat of DEFAULT_TAXONOMY.dimensions.find(d => d.id === 'd2')!.categories) {
-      map[cat.name] = cat.color;
-    }
-    return map;
   }, []);
 
   const portraitRows = useMemo(() => {
@@ -120,309 +247,241 @@ export default function App() {
     }));
   }, []);
 
-  const tableData = useMemo(() => {
-    return CONVERSATIONS.map(conv => {
-      const m = calculateConversationMetrics(conv);
-      const roles = countsBy(conv.messages.map(msg => ({ id: msg.id, role: msg.role || 'Unknown' })), 'role');
-      const dominant = sortCounts(roles)[0]?.label || 'Unknown';
-      return {
-        id: conv.id,
-        title: conv.title,
-        turns: m.turnCount,
-        avgLength: Math.round(m.avgMsgLength),
-        dominant,
-        userTurns: m.userTurnCount,
-      };
-    });
-  }, []);
-
-  const inspectedMsg = useMemo(() => {
-    if (!activeMsg) return null;
-    return activeConv.messages.find(m => m.id === activeMsg) || null;
-  }, [activeMsg, activeConv]);
-
-  // ── Tab buttons ──────────────────────────────────────────────
-  const tabs: { id: TabId; label: string }[] = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'annotate', label: 'Annotate' },
-    { id: 'corpus', label: 'Corpus' },
-    { id: 'findings', label: 'Findings' },
-  ];
+  const activeStory = STORIES.find(s => s.id === activeStoryId)!;
 
   return (
-    <div style={{
-      background: theme.colors.background,
-      minHeight: '100vh',
-      padding: '32px 40px',
-      color: theme.colors.text.primary,
-      fontFamily: 'Inter, system-ui, sans-serif',
-    }}>
-      {/* ── Header ──────────────────────────────────────────────── */}
-      <header style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <h1 style={{
-            background: theme.gradients.premium,
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            fontSize: '28px',
-            marginBottom: '4px',
-          }}>
-            Research Tools
-          </h1>
-          <p style={{ color: theme.colors.text.secondary, fontSize: '14px' }}>
-            Generalised toolkit for qualitative research, annotation, and corpus analysis
-          </p>
+    <div className="flex bg-bloom-bg">
+      {/* ── Sidebar ────────────────────────────────────────────── */}
+      <aside className="storybook-sidebar">
+        <div className="flex items-center gap-3 mb-10">
+          <div className="w-8 h-8 bg-bloom-yellow rounded-lg flex items-center justify-center text-bloom-black font-bold">R</div>
+          <h1 className="text-xl font-bold tracking-tight">RTL Guide</h1>
         </div>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          {tabs.map(t => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '13px',
-                fontWeight: 600,
-                background: tab === t.id ? theme.colors.text.primary : 'rgba(255,255,255,0.05)',
-                color: tab === t.id ? theme.colors.background : theme.colors.text.primary,
-                transition: 'all 0.15s',
-              }}
-            >
-              {t.label}
-            </button>
-          ))}
-          <PremiumButton onClick={() => alert('Export triggered')}>Export</PremiumButton>
-        </div>
-      </header>
 
-      {/* ── TAB: Overview ───────────────────────────────────────── */}
-      {tab === 'overview' && (
-        <>
-          <KPIGrid items={[
-            { label: 'Conversations', value: CONVERSATIONS.length, color: '#6366f1' },
-            { label: 'Total Turns', value: CONVERSATIONS.reduce((s, c) => s + c.messages.length, 0), color: '#ec4899' },
-            { label: 'Avg Turn Length', value: `${Math.round(metrics.avgMsgLength)} chars` },
-            { label: 'Active Conversation', value: activeConv.id, color: '#10b981' },
-          ]} />
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginTop: '24px' }}>
-            <GlassCard title="Transcript">
-              <TranscriptViewer
-                messages={activeConv.messages as Message[]}
-                onMessageClick={setActiveMsg}
-                highlightedId={activeMsg}
-              />
-            </GlassCard>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <GlassCard title="Radial Layout">
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <RadialLayout
-                    messages={activeConv.messages as Message[]}
-                    width={380}
-                    height={380}
-                    onNodeClick={setActiveMsg}
-                  />
-                </div>
-              </GlassCard>
-
-              <ItemInspector
-                title={inspectedMsg?.speaker?.toUpperCase()}
-                subtitle={inspectedMsg?.content}
-                accentColor={inspectedMsg?.metadata?.roleColor}
-                visible={!!inspectedMsg}
-                fields={inspectedMsg ? [
-                  { label: 'Role', value: inspectedMsg.role || '—', color: inspectedMsg.metadata?.roleColor },
-                  { label: 'D1', value: inspectedMsg.metadata?.d1 || '—' },
-                  { label: 'D3', value: inspectedMsg.metadata?.d3 || '—' },
-                  { label: 'Tension', value: `${Math.round((inspectedMsg.metadata?.tension || 0) * 100)}%` },
-                ] : []}
-              />
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* ── TAB: Annotate ───────────────────────────────────────── */}
-      {tab === 'annotate' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '24px' }}>
-          <GlassCard title={`Transcript — ${activeConv.id}`}>
-            <TranscriptViewer
-              messages={activeConv.messages as Message[]}
-              onMessageClick={setActiveMsg}
-              highlightedId={activeMsg}
-            />
-          </GlassCard>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <GlassCard title="Coding Form">
-              <CompactSelector
-                label="D2: Care Role"
-                options={DEFAULT_TAXONOMY.dimensions[1].categories.map(c => c.name)}
-                selected={selectedRole}
-                onSelect={setSelectedRole}
-                definitions={Object.fromEntries(
-                  DEFAULT_TAXONOMY.dimensions[1].categories.map(c => [c.name, c.description || ''])
-                )}
-              />
-              <TagSelector
-                label="D3: Strategies"
-                options={DEFAULT_TAXONOMY.dimensions[2].categories.map(c => c.name)}
-                selected={selectedStrategies}
-                onToggle={s => setSelectedStrategies(prev =>
-                  prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]
-                )}
-                colorMap={Object.fromEntries(
-                  DEFAULT_TAXONOMY.dimensions[2].categories.map(c => [c.name, c.color])
-                )}
-              />
-            </GlassCard>
-
-            <AnnotationDesk
-              title="Additional Fields"
-              fields={[
-                { id: 'confidence', label: 'Confidence', type: 'select', options: ['Low', 'Medium', 'High'] },
-                { id: 'paradox', label: 'Flag Paradox', type: 'boolean' },
-                { id: 'notes', label: 'Notes', type: 'text' },
-              ]}
-              onSubmit={data => console.log('Annotation:', { role: selectedRole, strategies: selectedStrategies, ...data })}
-            />
-
-            <GlassCard title="Role Distribution">
-              <BarDistribution data={roleCounts} />
-            </GlassCard>
-          </div>
-        </div>
-      )}
-
-      {/* ── TAB: Corpus ─────────────────────────────────────────── */}
-      {tab === 'corpus' && (
-        <>
-          <ControlPanel
-            groups={[
-              {
-                label: 'View',
-                options: [
-                  { value: 'portrait', label: 'Document Portrait' },
-                  { value: 'table', label: 'Table View' },
-                ],
-                value: viewMode === 'table' ? 'table' : 'portrait',
-                onChange: v => setViewMode(v),
-              },
-            ]}
-            actions={[{ label: 'Regenerate Data', onClick: () => location.reload(), variant: 'danger' }]}
-          />
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '24px' }}>
-            <GlassCard title={viewMode === 'table' ? 'Conversation Table' : 'Document Portrait'}>
-              {viewMode === 'table' ? (
-                <DataTable
-                  searchable
-                  columns={[
-                    { key: 'id', label: 'ID' },
-                    { key: 'turns', label: 'Turns' },
-                    { key: 'dominant', label: 'Dominant Role', render: (v: string) => (
-                      <Badge label={v} color={colorFor(DEFAULT_TAXONOMY, 'd2', v)} />
-                    )},
-                    { key: 'avgLength', label: 'Avg Length' },
-                  ]}
-                  data={tableData}
-                  onRowClick={row => {
-                    const conv = CONVERSATIONS.find(c => c.id === row.id);
-                    if (conv) setActiveConv(conv);
-                  }}
-                  activeRowId={activeConv.id}
-                />
-              ) : (
-                <DocumentPortrait
-                  rows={portraitRows}
-                  rowHeight={8}
-                  onRowClick={id => {
-                    const conv = CONVERSATIONS.find(c => c.id === id);
-                    if (conv) setActiveConv(conv);
-                  }}
-                  activeId={activeConv.id}
-                />
-              )}
-            </GlassCard>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <GlassCard title={`Selected: ${activeConv.id}`}>
-                <BarDistribution data={roleCounts} title="Role Mix" />
-                <div style={{ marginTop: '16px' }}>
-                  <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '8px', color: theme.colors.text.primary }}>
-                    Role Ribbon
-                  </div>
-                  <RoleRibbon segments={ribbonSegments} />
-                </div>
-              </GlassCard>
-
-              <GlassCard title="Multi-Track Timeline">
-                <MultiTrackTimeline tracks={multiTracks} cellSize={14} />
-              </GlassCard>
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* ── TAB: Findings ───────────────────────────────────────── */}
-      {tab === 'findings' && (
-        <>
-          <KPIGrid columns={3} items={[
-            { label: 'Total Turns Coded', value: CONVERSATIONS.reduce((s, c) => s + c.messages.length, 0) },
-            { label: 'Unique Roles', value: DEFAULT_TAXONOMY.dimensions[1].categories.length, color: '#8b5cf6' },
-            { label: 'Avg Role Shifts', value: (CONVERSATIONS.reduce((s, c) => {
-              const items = c.messages.map(m => ({ id: m.id, role: m.role || 'Unknown' }));
-              return s + Math.max(makeSegments(items, 'role').length - 1, 0);
-            }, 0) / CONVERSATIONS.length).toFixed(1) },
-          ]} />
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginTop: '24px' }}>
-            <GlassCard title="Role Transition Flow">
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <TransitionFlow
-                  matrix={transitionMatrix}
-                  width={440}
-                  height={380}
-                  colorMap={transitionColorMap}
-                />
+        <nav className="space-y-8">
+          {(['Overview', 'UI', 'Viz', 'Templates'] as const).map(category => (
+            <div key={category}>
+              <h2 className="bloom-section-label mb-4 opacity-50">{category}</h2>
+              <div className="space-y-1">
+                {STORIES.filter(s => s.category === category).map(story => (
+                  <button
+                    key={story.id}
+                    onClick={() => setActiveStoryId(story.id)}
+                    className={`w-full text-left px-4 py-2 rounded-lg text-sm transition-all ${
+                      activeStoryId === story.id 
+                        ? 'bg-bloom-yellow text-bloom-black font-semibold' 
+                        : 'text-bloom-gray-dark hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    {story.label}
+                  </button>
+                ))}
               </div>
-            </GlassCard>
+            </div>
+          ))}
+        </nav>
+      </aside>
 
-            <GlassCard title="D2 x D3 Heatmap">
-              <D2xD3Heatmap
-                data={HEATMAP}
-                rows={DEFAULT_TAXONOMY.dimensions[1].categories.map(c => c.name)}
-                cols={DEFAULT_TAXONOMY.dimensions[2].categories.map(c => c.name)}
-                width={440}
-                height={320}
-              />
-            </GlassCard>
+      {/* ── Main Stage ─────────────────────────────────────────── */}
+      <main className="storybook-stage flex-1">
+        <header className="storybook-header">
+          <div className="flex items-center gap-4">
+            <div className="p-2 bg-bloom-bg-subtle rounded-lg border border-bloom-gray">
+              {activeStory.category === 'Viz' ? <BarChart size={20} /> : <Component size={20} />}
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-bloom-black">{activeStory.label}</h2>
+              <p className="text-xs text-bloom-text-dim">{activeStory.category} Component • Research Tool Library</p>
+            </div>
           </div>
+          <div className="flex gap-3">
+             <PremiumButton onClick={() => alert('Exporting component code...')} variant="secondary">
+                Get Code
+             </PremiumButton>
+             <PremiumButton onClick={() => window.open('https://github.com/issacting93/RTL-v2')}>
+                GitHub
+             </PremiumButton>
+          </div>
+        </header>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px', marginTop: '24px' }}>
-            {DEFAULT_TAXONOMY.dimensions.map(dim => {
-              const allMsgs = CONVERSATIONS.flatMap(c => c.messages);
-              const raw = countsBy(
-                allMsgs.map(m => ({ id: m.id, [dim.id]: m.metadata?.[dim.id] || 'Unknown' })),
-                dim.id
-              );
-              const data = sortCounts(raw).map(e => ({
-                label: e.label,
-                count: e.count,
-                color: colorFor(DEFAULT_TAXONOMY, dim.id, e.label),
-              }));
-              return (
-                <GlassCard key={dim.id} title={`${dim.label} Distribution`}>
-                  <BarDistribution data={data} />
-                </GlassCard>
-              );
-            })}
-          </div>
-        </>
-      )}
+        <div className="p-10 max-w-6xl mx-auto">
+          {/* ── Component Info ───────────────────────────────────── */}
+          <section className="mb-12">
+             <div className="grid grid-cols-3 gap-12">
+                <div className="col-span-2">
+                   <h3 className="bloom-section-label mb-3">Description</h3>
+                   <p className="text-lg text-bloom-black leading-relaxed">
+                      {activeStory.description}
+                   </p>
+                </div>
+                <div>
+                   <h3 className="bloom-section-label mb-3">Use Case</h3>
+                   <p className="text-sm text-bloom-text-dim italic leading-relaxed">
+                      "{activeStory.useCase}"
+                   </p>
+                </div>
+             </div>
+          </section>
+
+          {/* ── Live Playground ──────────────────────────────────── */}
+          <section className="bg-white rounded-2xl shadow-bloom-md border border-bloom-gray overflow-hidden">
+             <div className="bg-bloom-bg-subtle border-b border-bloom-gray p-4 flex justify-between items-center">
+                <span className="text-xs font-bold uppercase tracking-wider text-bloom-text-dim">Live Demo</span>
+                <div className="flex gap-2">
+                   <div className="w-3 h-3 rounded-full bg-bloom-gray"></div>
+                   <div className="w-3 h-3 rounded-full bg-bloom-gray"></div>
+                   <div className="w-3 h-3 rounded-full bg-bloom-gray"></div>
+                </div>
+             </div>
+             
+             <div className="p-10 flex justify-center min-h-[400px]">
+                {activeStoryId === 'welcome' && (
+                  <div className="text-center max-w-2xl mt-10">
+                     <h1 className="text-5xl font-black text-bloom-black mb-6">Built for Research.</h1>
+                     <p className="text-xl text-bloom-text-dim mb-10 leading-relaxed">
+                        The Research Tool Library is a collection of high-fidelity, high-orthogonality components 
+                        designed for the future of conversation analysis and Human-AI interaction.
+                     </p>
+                     <div className="flex justify-center gap-4">
+                        <div className="bloom-pill bloom-pill-yellow">Explore Viz</div>
+                        <div className="bloom-pill bloom-pill-orange">UI Components</div>
+                        <div className="bloom-pill bloom-pill-black">Annotation Tools</div>
+                     </div>
+                     
+                     <div className="mt-20 grid grid-cols-3 gap-6">
+                        {[
+                           { icon: <FlaskConical className="text-bloom-purple" />, label: 'Empirical' },
+                           { icon: <MousePointer className="text-bloom-orange" />, label: 'Interactive' },
+                           { icon: <Type className="text-bloom-green" />, label: 'Qualitative' }
+                        ].map((item, i) => (
+                           <div key={i} className="flex flex-col items-center gap-3 p-6 bg-bloom-bg-subtle rounded-2xl border border-bloom-gray">
+                              {item.icon}
+                              <span className="text-sm font-bold uppercase tracking-widest">{item.label}</span>
+                           </div>
+                        ))}
+                     </div>
+                  </div>
+                )}
+
+                {activeStoryId === 'radial-layout' && (
+                  <TopologyNetwork 
+                    data={MOCK_GRAPH_DATA} 
+                    width={400} 
+                    height={400} 
+                    onNodeClick={node => setActiveMsg(node.id)}
+                  />
+                )}
+
+                {activeStoryId === 'transition-flow' && (
+                  <StateTransitionFlow
+                    matrix={transitionMatrix}
+                    width={500}
+                    height={400}
+                    colorMap={Object.fromEntries(
+                      DEFAULT_TAXONOMY.dimensions[1].categories.map(c => [c.name, c.color])
+                    )}
+                  />
+                )}
+
+                {activeStoryId === 'heatmap' && (
+                  <CooccurrenceMatrix
+                    data={HEATMAP}
+                    rows={DEFAULT_TAXONOMY.dimensions[1].categories.map(c => c.name)}
+                    cols={DEFAULT_TAXONOMY.dimensions[2].categories.map(c => c.name)}
+                    width={500}
+                    height={380}
+                  />
+                )}
+
+                {activeStoryId === 'transcript' && (
+                   <div className="w-full max-w-3xl border border-bloom-gray rounded-xl overflow-hidden shadow-sm">
+                      <TranscriptViewer 
+                        messages={activeConv.messages as Message[]} 
+                        onMessageClick={id => setActiveMsg(id)}
+                        highlightedId={activeMsg}
+                      />
+                   </div>
+                )}
+
+                {activeStoryId === 'annotation' && (
+                   <div className="w-full max-w-lg space-y-6">
+                      <CodingForm
+                         title="Categorical Field Entry"
+                         fields={[
+                           { id: 'cat', label: 'Primary Category', type: 'select', options: DEFAULT_TAXONOMY.dimensions[1].categories.map(c => c.name) },
+                           { id: 'confidence', label: 'Confidence Score', type: 'select', options: ['Low', 'Medium', 'High'] },
+                           { id: 'notes', label: 'Qualitative Synthesis', type: 'text' }
+                         ]}
+                         onSubmit={d => console.log('Saved Story:', d)}
+                      />
+                   </div>
+                )}
+
+                {activeStoryId === 'datatable' && (
+                   <div className="w-full bg-white border border-bloom-gray rounded-xl">
+                      <DataTable
+                        searchable
+                        columns={[
+                          { key: 'id', label: 'ID' },
+                          { key: 'turns', label: 'Turns' },
+                          { key: 'dominant', label: 'Dominant Role', render: (v: string) => (
+                            <Badge label={v} color={colorFor(DEFAULT_TAXONOMY, 'd2', v)} />
+                          )},
+                        ]}
+                        data={CONVERSATIONS.map(c => ({
+                          id: c.id,
+                          turns: c.messages.length,
+                          dominant: DEFAULT_TAXONOMY.dimensions[1].categories[Math.floor(Math.random() * 6)].name
+                        }))}
+                        onRowClick={r => alert(`Selected ${r.id}`)}
+                      />
+                   </div>
+                )}
+
+                {activeStoryId === 'kpi-grid' && (
+                   <div className="w-full max-w-4xl">
+                      <KPIGrid items={[
+                        { label: 'Total Stories', value: STORIES.length, color: '#f5c542' },
+                        { label: 'Lab Tokens', value: 12, color: '#e85a3c' },
+                        { icon: <Component />, label: 'Components', value: STORIES.filter(s => s.category !== 'Overview').length },
+                        { label: 'Uptime', value: '100%', color: '#22c55e' }
+                      ]} />
+                   </div>
+                )}
+
+                {activeStoryId === 'document-portrait' && (
+                   <div className="w-full bg-white p-6 border border-bloom-gray rounded-xl">
+                      <DocumentPortrait
+                        rows={portraitRows}
+                        rowHeight={10}
+                        onRowClick={id => alert(`Focusing on Doc: ${id}`)}
+                      />
+                   </div>
+                )}
+
+                {activeStoryId === 'multi-track' && (
+                   <div className="w-full bg-white p-8 border border-bloom-gray rounded-xl shadow-inner overflow-x-auto">
+                      <MultiTrackTimeline tracks={multiTracks} cellSize={18} />
+                   </div>
+                )}
+
+                {activeStoryId === 'tpl-corpus' && <div className="w-full"><CorpusAudit /></div>}
+                {activeStoryId === 'tpl-sequence' && <div className="w-full"><SequenceExplorer /></div>}
+                {activeStoryId === 'tpl-structural' && <div className="w-full"><StructuralDiagnostic /></div>}
+                {activeStoryId === 'tpl-affective' && <div className="w-full"><AffectivePortrait /></div>}
+                {activeStoryId === 'tpl-transition' && <div className="w-full"><RoleTransitionLab /></div>}
+                {activeStoryId === 'tpl-calibration' && <div className="w-full"><CalibrationSuite /></div>}
+             </div>
+          </section>
+          
+          {/* ── Footer ───────────────────────────────────────────── */}
+          <footer className="mt-20 pt-10 border-t border-bloom-gray text-center">
+             <p className="text-xs text-bloom-text-dim uppercase tracking-[3px]">
+                COPHEE Research Lab • Interactional Cartography Suite • 2026
+             </p>
+          </footer>
+        </div>
+      </main>
     </div>
   );
 }

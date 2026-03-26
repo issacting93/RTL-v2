@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
 import { TransitionMatrix } from '@research-tools/core';
 
-interface TransitionFlowProps {
+interface StateTransitionFlowProps {
   matrix: TransitionMatrix;
   width?: number;
   height?: number;
   colorMap?: Record<string, string>;
 }
 
-export const TransitionFlow: React.FC<TransitionFlowProps> = ({
+export const StateTransitionFlow: React.FC<StateTransitionFlowProps> = ({
   matrix,
   width = 500,
   height = 400,

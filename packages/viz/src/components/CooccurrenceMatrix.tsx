@@ -7,7 +7,7 @@ interface HeatmapData {
   value: number;
 }
 
-interface D2xD3HeatmapProps {
+interface CooccurrenceMatrixProps {
   data: HeatmapData[];
   rows: string[];
   cols: string[];
@@ -27,7 +27,7 @@ interface D2xD3HeatmapProps {
  * @param height - The height of the component.
  * @param colorRange - Tuple of [minColor, maxColor] for the heatmap gradient.
  */
-export const D2xD3Heatmap: React.FC<D2xD3HeatmapProps> = ({
+export const CooccurrenceMatrix: React.FC<CooccurrenceMatrixProps> = ({
   data,
   rows,
   cols,

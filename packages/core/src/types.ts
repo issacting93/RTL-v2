@@ -2,7 +2,7 @@
 
 export interface DataItem {
   id: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface Message {
@@ -11,14 +11,14 @@ export interface Message {
   content: string;
   timestamp?: string;
   role?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface Conversation {
   id: string;
   title?: string;
   messages: Message[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // ── Taxonomy (generalised category system) ──────────────────────
@@ -56,7 +56,7 @@ export interface Annotation {
   id: string;
   targetId: string;
   type: string;
-  value: any;
+  value: unknown;
   annotator: string;
   timestamp: string;
   confidence?: number;
@@ -65,11 +65,11 @@ export interface Annotation {
 
 // ── Segments & Sequences ────────────────────────────────────────
 
-export interface Segment {
+export interface Segment<T = Record<string, unknown>> {
   value: string;
   start: number;
   end: number;
-  items: DataItem[];
+  items: T[];
 }
 
 // ── Metrics & Distribution ──────────────────────────────────────
@@ -92,9 +92,28 @@ export interface TransitionMatrix {
 
 // ── Dataset wrapper ─────────────────────────────────────────────
 
-export interface Dataset<T extends DataItem = DataItem> {
+export interface Dataset<T = Record<string, unknown>> {
   id: string;
   title?: string;
   items: T[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
+}
+
+// ── Graph Data (Atlas / Cartography) ─────────────────────────────
+
+export interface GraphNode extends DataItem {
+  node_type: string;
+  id: string;
+}
+
+export interface GraphLink {
+  source: string | any;
+  target: string | any;
+  edge_type: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface GraphData {
+  nodes: GraphNode[];
+  links: GraphLink[];
 }

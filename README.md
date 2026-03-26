@@ -18,7 +18,7 @@ npm install
 ```bash
 npm run dev
 ```
-Starts the sample dashboard (v2.0) at `http://localhost:5178/`.
+Starts the sample RTL Guide (v2.1) at `http://localhost:5176/`.
 
 ## 📂 Project Structure
 - **`@research-tools/core`**: Transition matrices, segment logic, and conversation metrics.

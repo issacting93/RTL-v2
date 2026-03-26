@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../AROMA/phase_3_human_coding/annotation_desk"
+		},
+		{
+			"path": "../AROMA"
+		},
+		{
+			"path": "../../Role Dynamics Visualization"
+		},
+		{
+			"path": "../../../Downloads/aroma_research_ui"
+		},
+		{
+			"path": "../GitHub/Cartography_v2/public/atlas_suite"
+		}
+	],
+	"settings": {}
+}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { GlassCard, PremiumButton } from './Base.tsx';
-import { theme } from '../theme.ts';
+import { GlassCard, PremiumButton } from './Base';
+import { theme } from '../theme';
 
 interface AnnotationField {
   id: string;
@@ -9,16 +9,16 @@ interface AnnotationField {
   options?: string[];
 }
 
-interface AnnotationDeskProps {
+interface CodingFormProps {
   fields: AnnotationField[];
   onSubmit: (data: Record<string, any>) => void;
   title?: string;
 }
 
-export const AnnotationDesk: React.FC<AnnotationDeskProps> = ({ 
-  fields, 
+export const CodingForm: React.FC<CodingFormProps> = ({
+  fields,
   onSubmit,
-  title = "Annotation Desk"
+  title = "Coding Workspace"
 }) => {
   const [data, setData] = useState<Record<string, any>>({});
 
@@ -37,7 +37,7 @@ export const AnnotationDesk: React.FC<AnnotationDeskProps> = ({
             {field.type === 'text' && (
               <textarea
                 style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
+                  background: theme.colors.backgroundSubtle,
                   border: `1px solid ${theme.colors.border}`,
                   borderRadius: '8px',
                   padding: '10px',
@@ -51,7 +51,7 @@ export const AnnotationDesk: React.FC<AnnotationDeskProps> = ({
             {field.type === 'select' && (
               <select
                 style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
+                  background: theme.colors.backgroundSubtle,
                   border: `1px solid ${theme.colors.border}`,
                   borderRadius: '8px',
                   padding: '10px',
@@ -67,7 +67,7 @@ export const AnnotationDesk: React.FC<AnnotationDeskProps> = ({
               </select>
             )}
             {field.type === 'boolean' && (
-              <input 
+              <input
                 type="checkbox"
                 onChange={(e) => handleChange(field.id, e.target.checked)}
               />

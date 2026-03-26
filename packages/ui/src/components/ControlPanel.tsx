@@ -1,5 +1,5 @@
 import React from 'react';
-import { theme } from '../theme.ts';
+import { theme } from '../theme';
 
 interface ToggleOption {
   value: string;
@@ -25,7 +25,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ groups, actions }) =
       flexWrap: 'wrap',
       padding: '16px 20px',
       background: theme.colors.surface,
-      backdropFilter: 'blur(12px)',
       border: `1px solid ${theme.colors.border}`,
       borderRadius: '12px',
       marginBottom: '24px',
@@ -49,9 +48,9 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ groups, actions }) =
                 onClick={() => group.onChange(opt.value)}
                 style={{
                   padding: '6px 14px',
-                  background: isActive ? theme.colors.text.primary : 'rgba(255,255,255,0.05)',
+                  background: isActive ? theme.colors.text.primary : theme.colors.backgroundSubtle,
                   color: isActive ? theme.colors.background : theme.colors.text.primary,
-                  border: 'none',
+                  border: `1px solid ${isActive ? theme.colors.text.primary : theme.colors.border}`,
                   borderRadius: '6px',
                   cursor: 'pointer',
                   fontSize: '12px',
