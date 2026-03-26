@@ -67,48 +67,49 @@ export const RoleTransitionLab: React.FC = () => {
         </div>
       </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8">
-        {/* ... (rest of the file) */}
-        <section className="space-y-4">
-           <div className="flex justify-between items-center">
-              <h2 className="text-sm font-black uppercase tracking-widest text-bloom-black">Transition Dynamics (Circular Flow)</h2>
-              <span className="text-[10px] font-black text-bloom-black border border-bloom-gray px-2 py-0.5 rounded-full bg-bloom-bg-subtle">Supporter Sequence</span>
-           </div>
-           <div className="bg-white rounded-[40px] p-8 border border-bloom-gray shadow-bloom-md aspect-video flex items-center justify-center overflow-hidden">
-              <StateTransitionFlow 
-                matrix={{
-                  labels: tfNodes.map(n => n.id),
-                  matrix: [[0, 10, 0, 0, 4], [0, 15, 0, 8, 0], [12, 0, 0, 0, 0], [0, 0, 5, 0, 0], [0, 0, 0, 0, 0]]
-                }} 
-                width={600} 
-                height={400} 
-              />
-           </div>
-        </section>
+      {/* Transition Dynamics */}
+      <section className="space-y-4">
+         <div className="flex justify-between items-center">
+            <h2 className="text-sm font-black uppercase tracking-widest text-bloom-black">Transition Dynamics (Circular Flow)</h2>
+            <span className="text-[10px] font-black text-bloom-black border border-bloom-gray px-2 py-0.5 rounded-full bg-bloom-bg-subtle">Participant Sequence</span>
+         </div>
+         <div className="bg-white rounded-[40px] p-8 border border-bloom-gray shadow-bloom-md aspect-video flex items-center justify-center overflow-hidden">
+            <StateTransitionFlow 
+              matrix={{
+                labels: tfNodes.map(n => n.id),
+                matrix: [[0, 10, 0, 0, 4], [0, 15, 0, 8, 0], [12, 0, 0, 0, 0], [0, 0, 5, 0, 0], [0, 0, 0, 0, 0]]
+              }} 
+              width={800} 
+              height={500} 
+            />
+         </div>
+      </section>
 
-        <section className="space-y-4">
-           <h2 className="text-sm font-black uppercase tracking-widest text-bloom-black">Role × Strategy Density</h2>
+      {/* Role x Strategy Density */}
+      <section className="space-y-4">
+         <h2 className="text-sm font-black uppercase tracking-widest text-bloom-black">Role × Strategy Density</h2>
+         <div className="bg-white rounded-[40px] p-8 border border-bloom-gray shadow-bloom-md">
            <CooccurrenceMatrix 
              data={d2xd3Data} 
              rows={['Advisor', 'Listener', 'Advocate']} 
              cols={['Suggestion', 'Fact', 'Affirmation', 'Question', 'Validation']} 
-             height={400} 
+             height={500} 
            />
-           <div className="p-4 bg-bloom-bg-subtle border border-bloom-gray rounded-3xl">
-              <p className="text-[10px] text-bloom-text-dim font-bold uppercase mb-1">Observation</p>
-              <p className="text-xs text-bloom-text-dim leading-relaxed">
-                Strong co-occurrence between <strong className="text-bloom-black">Advisor</strong> and <strong className="text-bloom-black">Suggestion</strong> confirms active guidance patterns in the dataset.
-              </p>
-           </div>
-        </section>
-      </div>
+         </div>
+         <div className="p-4 bg-bloom-bg-subtle border border-bloom-gray rounded-3xl">
+            <p className="text-[10px] text-bloom-text-dim font-bold uppercase mb-1">Observation</p>
+            <p className="text-xs text-bloom-text-dim leading-relaxed">
+              Strong co-occurrence between <strong className="text-bloom-black">Advisor</strong> and <strong className="text-bloom-black">Suggestion</strong> confirms active guidance patterns in the dataset.
+            </p>
+         </div>
+      </section>
 
       <section className="space-y-4">
-        <h2 className="text-sm font-black uppercase tracking-widest text-bloom-black">Paradox Escalation (By Normalized Position)</h2>
+        <h2 className="text-sm font-black uppercase tracking-widest text-bloom-black">Supporter Paradox Distribution</h2>
         <ParadoxHeatmap 
            data={MOCK_PARADOX_STATS} 
            bins={10} 
-           title="Supporter Paradox Distribution" 
+           title="Paradox Temporal Density" 
         />
         <div className="bg-bloom-black text-white p-8 rounded-3xl flex items-center gap-8 shadow-bloom-xl overflow-hidden relative">
            <div className="absolute -left-10 -bottom-10 w-48 h-48 bg-bloom-yellow/10 rounded-full blur-[60px]"></div>
