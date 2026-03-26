@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SequenceBatchManager, ProtocolDraftingWorkspace } from '@research-tools/ui';
+import { SequenceBatchManager, ProtocolDraftingWorkspace, TranscriptViewer } from '@research-tools/ui';
 import { Database, Edit3, CheckCircle, AlertCircle } from 'lucide-react';
 import { MOCK_CALIBRATION_ITEMS, MOCK_SEQUENCE_TURNS } from './mockData';
 
@@ -57,64 +57,62 @@ export const CalibrationSuite: React.FC = () => {
       ) : (
         <section className="animate-in slide-in-from-right-4 duration-500">
           {selectedItem ? (
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_450px] gap-8">
-              <div className="space-y-6">
-                <div className="bg-bloom-black text-white p-6 rounded-3xl flex items-center justify-between">
-                   <div>
-                      <h2 className="text-lg font-black tracking-tight">Coding Sequence: {selectedItem.external_id}</h2>
-                      <p className="text-xs opacity-60 font-medium">Turns 1-10 · Research Suite v2.2</p>
-                   </div>
-                   <div className="flex gap-2">
-                      <div className="px-3 py-1 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest">Live Session</div>
-                   </div>
-                </div>
-                
-                <div className="bg-white border border-bloom-gray rounded-[40px] p-8 shadow-bloom-xl space-y-6">
-                  {MOCK_SEQUENCE_TURNS.map((turn, idx) => (
-                    <div key={idx} className="flex gap-4 group">
-                      <div className="shrink-0 w-8 h-8 rounded-full bg-bloom-bg-subtle border border-bloom-gray flex items-center justify-center text-[10px] font-black text-bloom-text-dim">
-                        {idx + 1}
-                      </div>
-                      <div className="space-y-1">
-                        <p className={`text-[10px] font-black uppercase tracking-widest ${turn.d2 === 'Seeker' ? 'text-bloom-orange' : 'text-bloom-black'}`}>
-                          {turn.d2 === 'Seeker' ? 'User (Seeker)' : `Supporter (${turn.d2})`}
-                        </p>
-                        <p className="text-sm font-medium text-bloom-black leading-relaxed">{turn.text}</p>
-                      </div>
+              <div className="grid grid-cols-1 lg:grid-cols-[1fr_450px] bg-bloom-bg min-h-[calc(100vh-200px)] rounded-[40px] overflow-hidden border border-bloom-gray shadow-bloom-xl">
+                <div className="p-8 space-y-8 overflow-y-auto">
+                  <div className="bg-bloom-black text-white p-8 rounded-3xl flex items-center justify-between shadow-bloom-lg">
+                     <div>
+                        <h2 className="text-xl font-black tracking-tight mb-1">Coding Sequence: {selectedItem.external_id}</h2>
+                        <p className="text-xs opacity-60 font-medium uppercase tracking-widest">Turns 1-{MOCK_SEQUENCE_TURNS.length} · Research Suite v2.2</p>
+                     </div>
+                     <div className="px-4 py-2 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/20">
+                        Live Session
+                     </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h3 className="text-xs font-black uppercase tracking-[0.2em] text-bloom-text-dim px-2">Interactive Transcript</h3>
+                    <div className="bg-white/50 rounded-3xl p-6 border border-bloom-gray/50 shadow-inner">
+                      <TranscriptViewer 
+                        messages={MOCK_SEQUENCE_TURNS.map(t => ({
+                          id: `t-${t.idx}`,
+                          speaker: t.d2 === 'Seeker' ? 'user' : 'assistant',
+                          role: t.d2 === 'Seeker' ? undefined : (t.d2 === 'Advisor' || t.d2 === 'Listener' || t.d2 === 'Advocate' || t.d2 === 'Navigator' || t.d2 === 'Companion' ? t.d2 : undefined),
+                          content: t.text
+                        }))} 
+                      />
                     </div>
-                  ))}
+                  </div>
+
+                  <div className="p-6 bg-bloom-yellow/5 rounded-3xl border border-bloom-yellow/20 flex items-start gap-4">
+                     <AlertCircle className="w-6 h-6 text-bloom-yellow shrink-0" />
+                     <p className="text-sm text-bloom-text-dim font-medium leading-relaxed">
+                       <strong className="text-bloom-black uppercase mr-2 tracking-wider">Protocol Note:</strong> 
+                       Ensure you have reviewed the Coder Guide (§4.2) regarding "Paradox Risk" before submitting this sequence.
+                     </p>
+                  </div>
                 </div>
 
-                <div className="p-4 bg-bloom-bg-subtle rounded-2xl border border-bloom-gray flex items-start gap-3">
-                   <AlertCircle className="w-5 h-5 text-bloom-yellow shrink-0" />
-                   <p className="text-xs text-bloom-text-dim font-medium leading-relaxed">
-                     <strong className="text-bloom-black uppercase mr-2">Protocol Note:</strong> 
-                     Ensure you have reviewed the Coder Guide (§4.2) regarding "Paradox Risk" before submitting this sequence.
-                   </p>
+                <div className="sticky top-0 bg-white shadow-bloom-md z-10">
+                  <ProtocolDraftingWorkspace 
+                    conversationId={selectedItem.external_id}
+                    sequence={{
+                      id: selectedItem.id,
+                      turns: MOCK_SEQUENCE_TURNS.map(t => ({
+                        id: String(Math.random()),
+                        speaker: t.d2 === 'Seeker' ? 'seeker' : 'supporter',
+                        text: t.text
+                      }))
+                    }}
+                    onSaveAnnotation={async (data: any) => {
+                      console.log('Saved Annotation:', data);
+                    }}
+                    onSaveStance={async (stance: any, notes: string) => {
+                      console.log('Saved Stance:', stance, notes);
+                    }}
+                    existingStance={selectedItem.stance}
+                  />
                 </div>
               </div>
-
-              <div className="sticky top-8">
-                <ProtocolDraftingWorkspace 
-                  conversationId={selectedItem.external_id}
-                  sequence={{
-                    id: selectedItem.id,
-                    turns: MOCK_SEQUENCE_TURNS.map(t => ({
-                      id: String(Math.random()),
-                      speaker: t.d2 === 'Seeker' ? 'seeker' : 'supporter',
-                      text: t.text
-                    }))
-                  }}
-                  onSaveAnnotation={async (data: any) => {
-                    console.log('Saved Annotation:', data);
-                  }}
-                  onSaveStance={async (stance: any, notes: string) => {
-                    console.log('Saved Stance:', stance, notes);
-                  }}
-                  existingStance={selectedItem.stance}
-                />
-              </div>
-            </div>
           ) : (
             <div className="h-[500px] flex flex-col items-center justify-center bg-bloom-bg-subtle rounded-[40px] border-2 border-dashed border-bloom-gray text-center space-y-4">
                <Database size={48} className="text-bloom-gray-dark" />
