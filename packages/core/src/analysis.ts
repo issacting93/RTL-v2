@@ -1,4 +1,4 @@
-import { Segment, CountEntry, TransitionMatrix, Conversation } from './types';
+import { Segment, CountEntry, TransitionMatrix, Conversation, Message } from './types';
 
 /** Count occurrences of a key across items. */
 export function countsBy<T extends Record<string, unknown>>(
@@ -127,4 +127,54 @@ export function extractRoles(conversation: Conversation): string[] {
     if (m.role) roles.add(m.role);
   });
   return Array.from(roles);
+}
+
+/** 
+ * Detect interactional repair patterns in a message.
+ * High-value metric for 'Agency Collapse' and 'Grounding' analysis.
+ */
+const REPAIR_PATTERNS = [
+  'sorry',
+  'i meant',
+  'let me correct',
+  'that\'s wrong',
+  'correction',
+  'wait',
+  'actually'
+];
+
+export function detectRepair(message: string): boolean {
+  const lower = message.toLowerCase();
+  return REPAIR_PATTERNS.some(pattern => lower.includes(pattern));
+}
+
+/** Calculate the Repair Loop Metric (Repairs / Total Turns). */
+export function calculateRepairRate(messages: Message[]): number {
+  if (!messages.length) return 0;
+  const repairs = messages.filter(m => detectRepair(m.content)).length;
+  return repairs / messages.length;
+}
+
+/** 
+ * Build a simple graph state from a conversation sequence.
+ * Enables interaction-driven topological analysis (Atlas).
+ */
+export function buildGraphState(messages: Message[]) {
+  const nodes = messages.map((m, i) => ({
+    id: `m${i}`,
+    label: m.speaker,
+    content: m.content,
+    timestamp: m.timestamp
+  }));
+
+  const edges = [];
+  for (let i = 1; i < messages.length; i++) {
+    edges.push({
+      source: `m${i - 1}`,
+      target: `m${i}`,
+      type: 'sequence'
+    });
+  }
+
+  return { nodes, edges };
 }
