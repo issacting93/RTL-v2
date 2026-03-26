@@ -42,6 +42,7 @@ import { StructuralDiagnostic } from './templates/StructuralDiagnostic';
 import { AffectivePortrait } from './templates/AffectivePortrait';
 import { RoleTransitionLab } from './templates/RoleTransitionLab';
 import { CalibrationSuite } from './templates/CalibrationSuite';
+import { InteractionCartography } from './templates/InteractionCartography';
 import { MOCK_GRAPH_DATA } from './templates/mockData';
 
 // ── Generate dummy data ─────────────────────────────────────────
@@ -64,7 +65,8 @@ type ComponentId =
   | 'tpl-structural'
   | 'tpl-affective'
   | 'tpl-transition'
-  | 'tpl-calibration';
+  | 'tpl-calibration'
+  | 'tpl-cartography';
 
 interface Story {
   id: ComponentId;
@@ -123,6 +125,13 @@ const STORIES: Story[] = [
     category: 'Templates', 
     description: 'Integrated protocol for human annotation and batch management.',
     useCase: 'Managing human ground-truth tasks and high-fidelity annotation forms.'
+  },
+  { 
+    id: 'tpl-cartography', 
+    label: 'Interaction Cartography', 
+    category: 'Templates', 
+    description: 'Advanced 3-column analysis dashboard ported from AROMA reference.',
+    useCase: 'Deep-dive micro-analysis with multi-dimensional trajectory tracking.'
   },
   { 
     id: 'radial-layout', 
@@ -471,6 +480,7 @@ export default function App() {
                 {activeStoryId === 'tpl-affective' && <div className="w-full"><AffectivePortrait /></div>}
                 {activeStoryId === 'tpl-transition' && <div className="w-full"><RoleTransitionLab /></div>}
                 {activeStoryId === 'tpl-calibration' && <div className="w-full"><CalibrationSuite /></div>}
+                {activeStoryId === 'tpl-cartography' && <div className="w-full"><InteractionCartography /></div>}
              </div>
           </section>
           
