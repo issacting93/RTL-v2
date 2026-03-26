@@ -105,11 +105,11 @@ export const RoleTransitionLab: React.FC = () => {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-sm font-black uppercase tracking-widest text-bloom-black">Supporter Paradox Distribution</h2>
+        <h2 className="text-sm font-black uppercase tracking-widest text-bloom-black">Visualise Distribution</h2>
         <ParadoxHeatmap 
            data={MOCK_PARADOX_STATS} 
            bins={10} 
-           title="Paradox Temporal Density" 
+           title="Visualise Distribution" 
         />
         <div className="bg-bloom-black text-white p-8 rounded-3xl flex items-center gap-8 shadow-bloom-xl overflow-hidden relative">
            <div className="absolute -left-10 -bottom-10 w-48 h-48 bg-bloom-yellow/10 rounded-full blur-[60px]"></div>
