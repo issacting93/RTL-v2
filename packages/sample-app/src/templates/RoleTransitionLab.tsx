@@ -67,10 +67,9 @@ export const RoleTransitionLab: React.FC = () => {
         </div>
       </section>
 
-      {/* Transition Dynamics */}
       <section className="space-y-4">
          <div className="flex justify-between items-center">
-            <h2 className="text-sm font-black uppercase tracking-widest text-bloom-black">Transition Dynamics (Circular Flow)</h2>
+            <h2 className="text-sm font-black uppercase tracking-widest text-bloom-black">relationship mapping</h2>
             <span className="text-[10px] font-black text-bloom-black border border-bloom-gray px-2 py-0.5 rounded-full bg-bloom-bg-subtle">Participant Sequence</span>
          </div>
          <div className="bg-white rounded-[40px] p-8 border border-bloom-gray shadow-bloom-md aspect-video flex items-center justify-center overflow-hidden">
