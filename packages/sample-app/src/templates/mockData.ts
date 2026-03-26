@@ -5,19 +5,19 @@ export const MOCK_CORPUS_TURNS = [
   { d1: 'Emotional', d2: 'Listener', d3: 'Affirmation' },
   { d1: 'Informational', d2: 'Advisor', d3: 'Suggestion' },
   { d1: 'Informational', d2: 'Advisor', d3: 'Fact' },
-  { d1: 'Emotional', d2: 'Advocate', d3: 'Validation' },
+  { d1: 'Emotional', d2: 'Coach', d3: 'Validation' },
   { d1: 'Informational', d2: 'Navigator', d3: 'Structure' },
   { d1: 'Emotional', d2: 'Companion', d3: 'Self-disclosure' },
   { d1: 'Emotional', d2: 'Listener', d3: 'Question' },
   { d1: 'Informational', d2: 'Advisor', d3: 'Suggestion' },
-  { d1: 'Emotional', d2: 'Advocate', d3: 'Validation' },
+  { d1: 'Emotional', d2: 'Coach', d3: 'Validation' },
   { d1: 'Informational', d2: 'Navigator', d3: 'Structure' },
   { d1: 'Emotional', d2: 'Companion', d3: 'Self-disclosure' },
   // Adding more for statistical significance in Mosaic/Parallel Sets
   ...Array(20).fill({ d1: 'Emotional', d2: 'Listener', d3: 'Affirmation' }),
   ...Array(15).fill({ d1: 'Informational', d2: 'Advisor', d3: 'Suggestion' }),
   ...Array(10).fill({ d1: 'Informational', d2: 'Navigator', d3: 'Structure' }),
-  ...Array(8).fill({ d1: 'Emotional', d2: 'Advocate', d3: 'Question' }),
+  ...Array(8).fill({ d1: 'Emotional', d2: 'Coach', d3: 'Question' }),
 ];
 
 export const MOCK_SEQUENCE_TURNS = [
@@ -28,13 +28,13 @@ export const MOCK_SEQUENCE_TURNS = [
   { idx: 4, text: "Maybe we could look at your schedule together?", d1: 'Informational', d2: 'Advisor', d3: 'Suggestion' },
   { idx: 5, text: "Actually, let's start with your priority list.", d1: 'Informational', d2: 'Navigator', d3: 'Structure' },
   { idx: 6, text: "I think that would help, thank you.", d1: 'Emotional', d2: 'Seeker', d3: 'Validation' },
-  { idx: 7, text: "You're doing great, we'll figure it out.", d1: 'Emotional', d2: 'Advocate', d3: 'Validation' },
+  { idx: 7, text: "You're doing great, we'll figure it out.", d1: 'Emotional', d2: 'Coach', d3: 'Validation' },
 ];
 
 export const MOCK_SEQUENCE_ROLES = [
   { start: 0, end: 3, role: 'Listener' },
   { start: 4, end: 5, role: 'Advisor' },
-  { start: 6, end: 7, role: 'Advocate' }
+  { start: 6, end: 7, role: 'Coach' }
 ];
 
 export const MOCK_LIFECYCLE_EVENTS = [

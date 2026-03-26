@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { SequenceTimeline, MultiTrackTimeline, TopologyNetwork } from '@research-tools/viz';
 import { KPIGrid, Badge } from '@research-tools/ui';
 import { MessageSquare, RefreshCcw, User, Zap, Share2 } from 'lucide-react';
+import { DEFAULT_TAXONOMY, colorFor } from '@research-tools/core';
 import { MOCK_SEQUENCE_TURNS, MOCK_SEQUENCE_ROLES, MOCK_GRAPH_DATA } from './mockData';
 
 export const SequenceExplorer: React.FC = () => {
@@ -14,16 +15,7 @@ export const SequenceExplorer: React.FC = () => {
     { label: 'Advocacy Burst', value: 'High', icon: <Zap className="w-5 h-5" />, detail: 'At turns 6-8' },
   ];
 
-  const getColor = (role: string) => {
-    const map: Record<string, string> = {
-      Listener: '#3b82f6',
-      Advisor: '#ef4444',
-      Advocate: '#fbbf24',
-      Navigator: '#8b5cf6',
-      Seeker: '#94a3b8'
-    };
-    return map[role] || '#cbd5e1';
-  };
+  const getColor = (role: string) => colorFor(DEFAULT_TAXONOMY, 'd2', role);
 
   const roleSegments = MOCK_SEQUENCE_ROLES.map(r => ({
     value: r.role,

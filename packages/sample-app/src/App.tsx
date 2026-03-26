@@ -77,124 +77,124 @@ interface Story {
 }
 
 const STORIES: Story[] = [
-  { 
-    id: 'welcome', 
-    label: 'Introduction', 
-    category: 'Overview', 
+  {
+    id: 'welcome',
+    label: 'Introduction',
+    category: 'Overview',
     description: 'Welcome to the Research Tool Library (RTL).',
-    useCase: 'Explore the high-fidelity component suite for qualitative research.'
+    useCase: 'Explore the component suite for conversation analysis and Human-AI interaction research.'
   },
-  { 
-    id: 'tpl-corpus', 
-    label: 'Dataset Overview', 
-    category: 'Templates', 
-    description: 'High-level analytical view of an entire interactional dataset.',
-    useCase: 'Analyzing multi-dimensional flows and statistical independence across thousands of turns.'
+  {
+    id: 'tpl-corpus',
+    label: 'Dataset Overview',
+    category: 'Templates',
+    description: 'Corpus-level statistical overview combining alluvial flow diagrams, mosaic plots for chi-squared independence testing, and stability classification.',
+    useCase: 'Auditing dimensional independence (D1/D2/D3) across a full dataset to verify taxonomy orthogonality before downstream analysis.'
   },
-  { 
-    id: 'tpl-sequence', 
-    label: 'Conversation Explorer', 
-    category: 'Templates', 
-    description: 'Deep-dive micro-analysis of a single conversation sequence.',
-    useCase: 'Inspecting turn-by-turn dynamics and dimensional co-occurrence in a specific case.'
+  {
+    id: 'tpl-sequence',
+    label: 'Conversation Explorer',
+    category: 'Templates',
+    description: 'Single-conversation deep dive combining a force-directed topology graph, role-segment timeline, multi-track dimensional view, and inline transcript.',
+    useCase: 'Case-study analysis of one conversation: inspecting turn-level role shifts, strategy co-occurrence, and structural topology.'
   },
-  { 
-    id: 'tpl-structural', 
-    label: 'Interaction Stability', 
-    category: 'Templates', 
-    description: 'Identifying and analyzing interactional rule violations and repairs.',
-    useCase: 'Diagnosing when and where social constraints are broken and how they are recovered.'
+  {
+    id: 'tpl-structural',
+    label: 'Interaction Stability',
+    category: 'Templates',
+    description: 'Constraint violation and repair analysis pairing a structural topology view with a temporal event lifecycle timeline.',
+    useCase: 'Identifying where conversational norms (e.g., accountability, politeness) are violated and how participants repair them.'
   },
-  { 
-    id: 'tpl-affective', 
-    label: 'Emotional Dynamics', 
-    category: 'Templates', 
-    description: 'Synchronized tracking of emotional dimensions and participation.',
-    useCase: 'Studying the emotional pulse and power dynamics of a Human-AI session.'
+  {
+    id: 'tpl-affective',
+    label: 'Emotional Dynamics',
+    category: 'Templates',
+    description: 'Affect tracking using the PAD (Pleasure-Arousal-Dominance) dimensional model with synchronized sparklines, a participation balance gauge, and document portrait.',
+    useCase: 'Studying emotional trajectories and power balance across a session using Mehrabian and Russell\'s PAD framework.'
   },
-  { 
-    id: 'tpl-transition', 
-    label: 'Participant Dynamics', 
-    category: 'Templates', 
-    description: 'Evolution of participant behavior and alignment patterns.',
-    useCase: 'Visualizing how participant roles and behaviors shift over the course of an interaction.'
+  {
+    id: 'tpl-transition',
+    label: 'Participant Dynamics',
+    category: 'Templates',
+    description: 'Role transition analysis combining participation distribution, state-transition flow diagrams, role-strategy co-occurrence matrices, and distribution heatmaps.',
+    useCase: 'Tracking how participant roles evolve over time and identifying cross-dimensional behavioral patterns (e.g., which strategies accompany which roles).'
   },
-  { 
-    id: 'tpl-calibration', 
-    label: 'Annotation Workspace', 
-    category: 'Templates', 
-    description: 'Integrated protocol for human annotation and batch management.',
-    useCase: 'Managing human ground-truth tasks and high-fidelity annotation forms.'
+  {
+    id: 'tpl-calibration',
+    label: 'Annotation Workspace',
+    category: 'Templates',
+    description: 'Human annotation workflow with a batch sequence manager, multi-dimensional coding form (D1/D2/D3 with confidence), stance capture, and linked transcript viewer.',
+    useCase: 'Managing ground-truth annotation tasks for inter-rater reliability studies and codebook calibration.'
   },
-  { 
-    id: 'tpl-cartography', 
-    label: 'Interaction Cartography', 
-    category: 'Templates', 
-    description: 'Advanced 3-column analysis dashboard ported from AROMA reference.',
-    useCase: 'Deep-dive micro-analysis with multi-dimensional trajectory tracking.'
+  {
+    id: 'tpl-cartography',
+    label: 'Interaction Cartography',
+    category: 'Templates',
+    description: 'Configurable multi-panel analytical dashboard with layer toggles, sequence navigation, search filtering, and synchronized timeline-transcript views.',
+    useCase: 'Flexible micro-analysis workbench for exploring sequential data with user-controlled dimensional visibility and linked selection.'
   },
-  { 
-    id: 'radial-layout', 
-    label: 'Topology Network', 
-    category: 'Viz', 
-    description: 'A circular conversation portrait mapping time to angle and metrics to distance.',
-    useCase: 'Visualizing turn-taking dynamics and tension shifts over the course of a single interaction.'
+  {
+    id: 'radial-layout',
+    label: 'Topology Network',
+    category: 'Viz',
+    description: 'Force-directed graph showing conversation structure: turns as nodes, sequential and semantic links as edges, with node types for moves, constraints, and violations.',
+    useCase: 'Visualizing the structural topology of a conversation — how turns, moves, and constraints relate to each other.'
   },
-  { 
-    id: 'transition-flow', 
-    label: 'State Transition Flow', 
-    category: 'Viz', 
-    description: 'Sankey-inspired diagram showing transitions between categorical states (e.g., roles).',
-    useCase: 'Analyzing the "flow" of a conversation—how participants shift between strategies or roles.'
+  {
+    id: 'transition-flow',
+    label: 'State Transition Flow',
+    category: 'Viz',
+    description: 'Sankey-style diagram rendering an N\u00d7N transition matrix as weighted flows between categorical states.',
+    useCase: 'Analyzing sequential dependencies — e.g., how often a Listener role transitions to Advisor, including self-loops.'
   },
-  { 
-    id: 'heatmap', 
-    label: 'Cooccurrence Matrix', 
-    category: 'Viz', 
-    description: 'Relational heatmap visualizing tactical co-occurrence across dimensions.',
-    useCase: 'Identifying cross-dimensional correlations, such as which strategies are most common for a specific role.'
+  {
+    id: 'heatmap',
+    label: 'Co-occurrence Matrix',
+    category: 'Viz',
+    description: 'Color-scaled matrix showing frequency counts at the intersection of two categorical dimensions.',
+    useCase: 'Identifying cross-dimensional associations — e.g., which D3 strategies co-occur most with each D2 role.'
   },
-  { 
-    id: 'transcript', 
-    label: 'Transcript Viewer', 
-    category: 'UI', 
-    description: 'High-fidelity chat transcript with speaker-aware styling and click-to-select.',
-    useCase: 'Core interface for reading and qualitative coding of conversation data.'
+  {
+    id: 'transcript',
+    label: 'Transcript Viewer',
+    category: 'UI',
+    description: 'Speaker-aware chat transcript with alternating alignment, click-to-select turns, and optional highlight state for linked views.',
+    useCase: 'Reading and navigating conversation data with visual speaker differentiation and selection-based linking to other panels.'
   },
-  { 
-    id: 'annotation', 
-    label: 'Coding Form', 
-    category: 'UI', 
-    description: 'Dynamic coding form with support for varied field types (Select, Tagging, Range).',
-    useCase: 'Standardizing human annotation workflows and high-fidelity data entry.'
+  {
+    id: 'annotation',
+    label: 'Coding Form',
+    category: 'UI',
+    description: 'Schema-driven form supporting select, tag, text, and range field types for structured data entry.',
+    useCase: 'Standardizing qualitative coding workflows — applying categorical labels and free-text notes to selected turns.'
   },
-  { 
-    id: 'datatable', 
-    label: 'Research Table', 
-    category: 'UI', 
-    description: 'Sortable, searchable data table for corpus-level metadata.',
-    useCase: 'Filtering and selecting specific conversations for deeper analysis.'
+  {
+    id: 'datatable',
+    label: 'Research Table',
+    category: 'UI',
+    description: 'Sortable, searchable data table with custom cell renderers and row-click selection.',
+    useCase: 'Browsing and filtering corpus-level metadata to select specific conversations for deeper analysis.'
   },
-  { 
-    id: 'kpi-grid', 
-    label: 'KPI Metrics', 
-    category: 'UI', 
-    description: 'Dashboard-style metrics grid for aggregate statistics.',
-    useCase: 'Providing high-level summaries of corpus distributions and turn counts.'
+  {
+    id: 'kpi-grid',
+    label: 'KPI Grid',
+    category: 'UI',
+    description: 'Responsive metric card grid displaying key performance indicators with optional icons, colors, and detail text.',
+    useCase: 'Summarizing aggregate statistics at the top of a dashboard — turn counts, coverage ratios, stability scores.'
   },
-  { 
-    id: 'document-portrait', 
-    label: 'Document Portrait', 
-    category: 'Viz', 
-    description: '"Barcode" style visualization of role distribution across multiple documents.',
-    useCase: 'Comparing structural patterns across a large corpus of conversations at a glance.'
+  {
+    id: 'document-portrait',
+    label: 'Document Portrait',
+    category: 'Viz',
+    description: 'Compact "barcode" visualization where each row represents a document and each cell a turn, colored by a categorical variable.',
+    useCase: 'Comparing role distribution patterns across many conversations at a glance — spotting structural outliers in a corpus.'
   },
-  { 
-    id: 'multi-track', 
-    label: 'Multi-Track Timeline', 
-    category: 'Viz', 
-    description: 'Parallel temporal tracks for different analytical dimensions.',
-    useCase: 'Inspecting co-occurrence of D1 (Intention), D2 (Role), and D3 (Strategy) in real-time.'
+  {
+    id: 'multi-track',
+    label: 'Multi-Track Timeline',
+    category: 'Viz',
+    description: 'Parallel horizontal tracks displaying categorical values per turn across multiple dimensions simultaneously.',
+    useCase: 'Aligning D1 (Support Type), D2 (Care Role), and D3 (Strategy) on a shared turn axis to spot co-occurrence patterns.'
   },
 ];
 

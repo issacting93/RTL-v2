@@ -2,6 +2,7 @@ import React from 'react';
 import { ParallelSets, MosaicPlot, StabilityDoughnut, TimingHistogram } from '@research-tools/viz';
 import { KPIGrid } from '@research-tools/ui';
 import { Activity, Layers, BarChart3, GitBranch, ShieldAlert, PieChart } from 'lucide-react';
+import { DEFAULT_TAXONOMY, colorFor } from '@research-tools/core';
 import { MOCK_CORPUS_TURNS, MOCK_STABILITY_DATA, MOCK_VIOLATION_TIMING } from './mockData';
 
 export const CorpusAudit: React.FC = () => {
@@ -19,17 +20,7 @@ export const CorpusAudit: React.FC = () => {
     { key: 'd3', label: 'Tactical Strategy (D3)' }
   ];
 
-  const d2ColorScale = (val: string) => {
-    const map: Record<string, string> = {
-      Listener: '#3b82f6',
-      Advisor: '#ef4444',
-      Advocate: '#fbbf24',
-      Navigator: '#8b5cf6',
-      Companion: '#10b981',
-      Unknown: '#94a3b8'
-    };
-    return map[val] || '#cbd5e1';
-  };
+  const d2ColorScale = (val: string) => colorFor(DEFAULT_TAXONOMY, 'd2', val);
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700">

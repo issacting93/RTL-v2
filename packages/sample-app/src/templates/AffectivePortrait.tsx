@@ -1,6 +1,7 @@
 import { AffectiveSparklines, DominanceGauge, DocumentPortrait } from '@research-tools/viz';
 import { KPIGrid } from '@research-tools/ui';
 import { Heart, Zap, User, BarChart } from 'lucide-react';
+import { DEFAULT_TAXONOMY, colorFor } from '@research-tools/core';
 import { MOCK_PAD_DATA } from './mockData';
 
 export const AffectivePortrait: React.FC = () => {
@@ -28,7 +29,7 @@ export const AffectivePortrait: React.FC = () => {
         <div className="p-4 bg-bloom-bg-subtle rounded-3xl border border-bloom-gray">
            <p className="text-xs text-bloom-text-dim font-medium leading-relaxed">
              <strong className="text-bloom-black uppercase mr-2">Research Insight:</strong> 
-             Notice how <span className="text-green-600 font-bold">Pleasure</span> remains high while <span className="text-orange-500 font-bold">Arousal</span> fluctuates during the mediation phase (Turns 10-20). This suggests a calm but intensive problem-solving session.
+             Notice how <span className="text-bloom-green font-bold">Pleasure</span> remains high while <span className="text-bloom-orange font-bold">Arousal</span> fluctuates during the mediation phase (Turns 10-20). This suggests a calm but intensive problem-solving session.
            </p>
         </div>
       </section>
@@ -70,19 +71,19 @@ export const AffectivePortrait: React.FC = () => {
              {/* Decorative element */}
              <div className="absolute -top-20 -right-20 w-64 h-64 bg-bloom-yellow/10 blur-[80px] rounded-full"></div>
              
-             <DocumentPortrait 
+             <DocumentPortrait
                rows={[{
                  id: 'Portrait_1',
                  label: 'Sequence Overview',
                  cells: [
-                   { color: '#94a3b8', tooltip: 'Opening' },
-                   { color: '#3b82f6', tooltip: 'Emotion Discovery' },
-                   { color: '#fbbf24', tooltip: 'Problem Exploration' },
-                   { color: '#8b5cf6', tooltip: 'Action Planning' },
-                   { color: '#10b981', tooltip: 'Closing' },
+                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Companion'), tooltip: 'Opening' },
+                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Listener'), tooltip: 'Emotion Discovery' },
+                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Coach'), tooltip: 'Problem Exploration' },
+                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Reflective Partner'), tooltip: 'Action Planning' },
+                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Navigator'), tooltip: 'Closing' },
                  ]
-               }]} 
-               rowHeight={40} 
+               }]}
+               rowHeight={40}
              />
           </div>
         </section>

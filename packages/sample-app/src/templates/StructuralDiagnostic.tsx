@@ -64,7 +64,7 @@ export const StructuralDiagnostic: React.FC = () => {
           <div className="grid grid-cols-2 gap-4">
              <div className="p-6 bg-white border border-bloom-gray rounded-3xl shadow-bloom-sm space-y-4">
                 <div className="flex items-center gap-3">
-                   <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+                   <div className="w-8 h-8 rounded-full bg-bloom-orange/10 flex items-center justify-center text-bloom-orange">
                       <ShieldAlert className="w-4 h-4" />
                    </div>
                    <h3 className="text-sm font-black text-bloom-black uppercase">Critical Violation</h3>
@@ -86,7 +86,7 @@ export const StructuralDiagnostic: React.FC = () => {
 
              <div className="p-6 bg-white border border-bloom-gray rounded-3xl shadow-bloom-sm space-y-4">
                 <div className="flex items-center gap-3">
-                   <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                   <div className="w-8 h-8 rounded-full bg-bloom-green/10 flex items-center justify-center text-bloom-green">
                       <ShieldCheck className="w-4 h-4" />
                    </div>
                    <h3 className="text-sm font-black text-bloom-black uppercase">Successful Repair</h3>

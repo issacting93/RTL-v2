@@ -93,37 +93,37 @@ export const InteractionCartography: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-6 animate-in fade-in duration-700">
-      <header className="flex justify-between items-end">
+    <div className="flex flex-col gap-8 animate-in fade-in duration-700 max-w-5xl mx-auto pb-20">
+      <header className="flex justify-between items-end border-b border-bloom-gray pb-6">
         <div>
           <h1 className="text-4xl font-black text-bloom-black mb-2 tracking-tight">Interaction Cartography</h1>
           <p className="text-bloom-text-dim max-w-2xl font-medium leading-relaxed">
-            Multi-dimensional sequence explorer for micro-analytical research. Ported from AROMA reference architecture.
+            Configurable multi-panel analytical dashboard with layer toggles, search filtering, and synchronized timeline-transcript views.
           </p>
         </div>
         <div className="flex gap-4 items-center">
-           <Badge variant="bloom">STABLE v2.5</Badge>
+           <Badge variant="bloom">v1.0.0</Badge>
            <div className="w-10 h-10 rounded-full bg-bloom-bg-subtle border border-bloom-gray flex items-center justify-center">
               <Activity size={18} className="text-bloom-black" />
            </div>
         </div>
       </header>
 
-      {/* ── Main Dashboard Layout ──────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr_320px] gap-6 items-start">
+      {/* ── Main Dashboard Layout (1-Column) ──────────────────── */}
+      <div className="flex flex-col gap-10">
         
-        {/* LEFT PANEL: CONTROLS */}
-        <aside className="space-y-6">
-          <GlassCard className="p-5 space-y-6">
+        {/* SECTION 1: CONTROLS & CONFIGURATION */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <GlassCard className="p-6 space-y-6">
             <div className="flex items-center gap-2 text-bloom-black">
               <Database size={18} />
-              <h3 className="text-sm font-black uppercase tracking-widest">Sequence Controls</h3>
+              <h3 className="text-sm font-black uppercase tracking-widest">Navigation & Filters</h3>
             </div>
             
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <CompactSelector 
-                  label="Select Case"
+                  label="Select Sequence"
                   options={MOCK_CALIBRATION_ITEMS.map(i => i.external_id)}
                   selected={selectedId}
                   onSelect={id => setSelectedId(id)}
@@ -131,7 +131,7 @@ export const InteractionCartography: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-bloom-text-dim">Turn Search</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-bloom-text-dim">Search Content</label>
                 <div className="relative">
                   <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-bloom-gray-dark" />
                   <input 
@@ -143,152 +143,143 @@ export const InteractionCartography: React.FC = () => {
                   />
                 </div>
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-bloom-text-dim">Layer Visibility</label>
-                <div className="grid grid-cols-3 gap-1">
-                  {(['d1', 'd2', 'd3'] as const).map(d => (
-                    <button
-                      key={d}
-                      onClick={() => setToggles({ ...toggles, [d]: !toggles[d] })}
-                      className={`py-1.5 rounded-lg text-[10px] font-bold border transition-all ${toggles[d] ? 'bg-bloom-black text-white border-bloom-black' : 'bg-white text-bloom-text-dim border-bloom-gray'}`}
-                    >
-                      {d.toUpperCase()}
-                    </button>
-                  ))}
-                </div>
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-widest text-bloom-text-dim">Layer Visibility</label>
+              <div className="flex gap-2">
+                {(['d1', 'd2', 'd3'] as const).map(d => (
+                  <button
+                    key={d}
+                    onClick={() => setToggles({ ...toggles, [d]: !toggles[d] })}
+                    className={`px-4 py-1.5 rounded-lg text-[10px] font-bold border transition-all ${toggles[d] ? 'bg-bloom-black text-white border-bloom-black' : 'bg-white text-bloom-text-dim border-bloom-gray'}`}
+                  >
+                    LAYER {d.toUpperCase()}
+                  </button>
+                ))}
               </div>
             </div>
           </GlassCard>
 
-          <GlassCard className="p-4 space-y-4">
+          <GlassCard className="p-6 space-y-4">
             <div className="flex items-center gap-2 text-bloom-black">
               <Info size={16} />
-              <h3 className="text-xs font-black uppercase tracking-widest">Role Codebook</h3>
+              <h3 className="text-sm font-black uppercase tracking-widest">Category Reference</h3>
             </div>
-            <div className="space-y-3">
-               <div>
-                  <Badge variant="bloom" label="Listener" />
-                  <p className="text-[11px] text-bloom-text-dim mt-2 leading-relaxed">
-                    Receptive, non-directive. Mirrors and validates the user's emotional state without introducing external reframes.
-                  </p>
+            <div className="space-y-4">
+               <div className="flex flex-wrap gap-3">
+                  {DEFAULT_TAXONOMY.dimensions[1].categories.map(c => (
+                    <div key={c.name} className="flex items-center gap-2 px-3 py-1.5 bg-bloom-bg-subtle rounded-full border border-bloom-gray">
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: c.color }} />
+                      <span className="text-[10px] font-bold text-bloom-black uppercase">{c.name}</span>
+                    </div>
+                  ))}
                </div>
-               <div className="pt-2 border-t border-bloom-gray">
-                  <div className="flex items-center gap-2 text-[10px] font-bold text-bloom-orange">
-                    <Shield size={12} />
-                    LOW PARADOX
-                  </div>
-               </div>
+               <p className="text-[11px] text-bloom-text-dim leading-relaxed font-medium bg-white/50 p-3 rounded-xl border border-dashed border-bloom-gray">
+                 Select a turn in the timeline or transcript to view specific metadata and category definitions.
+               </p>
             </div>
           </GlassCard>
+        </section>
 
-          <div className="p-4 bg-bloom-bg-subtle rounded-2xl border border-bloom-gray">
-             <h4 className="text-[10px] font-black text-bloom-text-dim uppercase tracking-[3px] mb-3">Legend</h4>
-             <div className="flex flex-wrap gap-2">
-                {DEFAULT_TAXONOMY.dimensions[1].categories.map(c => (
-                  <div key={c.name} className="flex items-center gap-1.5">
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: c.color }} />
-                    <span className="text-[9px] font-bold text-bloom-black">{c.name}</span>
-                  </div>
-                ))}
-             </div>
-          </div>
-        </aside>
-
-        {/* CENTER PANEL: ANALYSIS STAGE */}
-        <main className="space-y-6">
-          <section className="bg-white border border-bloom-gray rounded-[40px] p-8 shadow-bloom-xl space-y-8">
-            <div className="space-y-4">
+        {/* SECTION 2: VISUAL ANALYSIS STAGE */}
+        <section className="bg-white border border-bloom-gray rounded-[32px] p-8 shadow-bloom-xl space-y-12">
+          <div className="space-y-6">
+            <div className="flex items-center justify-between border-b border-bloom-gray pb-4">
               <div className="flex items-center gap-3">
                  <Layout size={20} className="text-bloom-purple" />
-                 <h2 className="text-sm font-black uppercase tracking-[0.2em] text-bloom-black">Role Trajectory</h2>
+                 <h2 className="text-sm font-black uppercase tracking-[0.2em] text-bloom-black">Primary Sequence</h2>
               </div>
-              <div className="bg-bloom-bg-subtle p-8 rounded-3xl border border-bloom-gray/50">
-                <SequenceTimeline segments={roleSegments} />
-              </div>
+              <Badge variant="bloom">MAIN FLOW</Badge>
             </div>
+            <div className="bg-bloom-bg-subtle p-8 rounded-3xl border border-bloom-gray/50">
+              <SequenceTimeline segments={roleSegments} />
+            </div>
+          </div>
 
-            <div className="space-y-4">
+          <div className="space-y-6">
+            <div className="flex items-center justify-between border-b border-bloom-gray pb-4">
               <div className="flex items-center gap-3">
                  <Activity size={20} className="text-bloom-orange" />
-                 <h2 className="text-sm font-black uppercase tracking-[0.2em] text-bloom-black">Multi-Track Timeline</h2>
+                 <h2 className="text-sm font-black uppercase tracking-[0.2em] text-bloom-black">Attribute Layers</h2>
               </div>
-              <div className="bg-white p-6 rounded-3xl border border-bloom-gray shadow-inner overflow-x-auto">
-                <MultiTrackTimeline 
-                  tracks={tracks} 
-                  cellSize={20}
-                  onCellClick={(_, idx) => setSelectedTurn(`t-${idx}`)}
+              <div className="text-[10px] font-bold text-bloom-text-dim uppercase">Sync: Turn idx</div>
+            </div>
+            <div className="bg-white p-6 rounded-3xl border border-bloom-gray shadow-inner overflow-x-auto">
+              <MultiTrackTimeline 
+                tracks={tracks} 
+                cellSize={24}
+                onCellClick={(_, idx) => setSelectedTurn(`t-${idx}`)}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 border-b border-bloom-gray pb-4">
+               <List size={20} className="text-bloom-green" />
+               <h2 className="text-sm font-black uppercase tracking-[0.2em] text-bloom-black">Transcript Viewer</h2>
+            </div>
+            <div className="bg-bloom-bg-subtle rounded-3xl overflow-hidden border border-bloom-gray max-h-[600px] flex flex-col shadow-inner">
+              <div className="flex-1 overflow-y-auto p-4">
+                <TranscriptViewer 
+                  messages={filteredMessages} 
+                  highlightedId={selectedTurn}
+                  onMessageClick={id => setSelectedTurn(id)}
                 />
               </div>
             </div>
+          </div>
+        </section>
 
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                 <List size={20} className="text-bloom-green" />
-                 <h2 className="text-sm font-black uppercase tracking-[0.2em] text-bloom-black">Dialogue Flow</h2>
-              </div>
-              <div className="bg-bloom-bg-subtle rounded-3xl overflow-hidden border border-bloom-gray max-h-[500px] flex flex-col">
-                <div className="flex-1 overflow-y-auto p-2">
-                  <TranscriptViewer 
-                    messages={filteredMessages} 
-                    highlightedId={selectedTurn}
-                    onMessageClick={id => setSelectedTurn(id)}
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-        </main>
-
-        {/* RIGHT PANEL: INSIGHTS & METRICS */}
-        <aside className="space-y-6">
-          <section className="grid grid-cols-1 gap-4">
-            <h3 className="text-[10px] font-black text-bloom-text-dim uppercase tracking-[3px] px-2">Key Metrics</h3>
+        {/* SECTION 3: ANALYTICAL METRICS & OBSERVATIONS */}
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div className="space-y-6">
+            <h3 className="text-[10px] font-black text-bloom-text-dim uppercase tracking-[3px] px-2">Analytical Metrics</h3>
             <KPIGrid 
-              columns={1}
+              columns={2}
               items={[
-                { label: 'Dominant Role', value: 'Listener', color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Listener') },
-                { label: 'Paradox Tier', value: 'Low', color: '#22c55e' },
-                { label: 'Role Shifts', value: '3', color: '#6366f1' },
-                { label: 'Support Share', value: '85%', color: '#f59e0b' }
+                { label: 'Primary Feature', value: 'Listener', color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Listener') },
+                { label: 'Complexity Score', value: 'Low', color: '#22c55e' },
+                { label: 'Sequence Shifts', value: '3', color: '#6366f1' },
+                { label: 'Focus Share', value: '85%', color: '#f59e0b' }
               ]} 
             />
-          </section>
+            
+            <GlassCard className="p-6 space-y-4">
+              <div className="flex items-center gap-2 text-bloom-black">
+                <Zap size={16} />
+                <h3 className="text-xs font-black uppercase tracking-widest">Observations</h3>
+              </div>
+              <div className="p-4 bg-bloom-yellow/10 rounded-2xl border border-bloom-yellow/20">
+                 <p className="text-[11px] text-bloom-text-dim leading-relaxed font-medium">
+                   Preliminary analysis indicates a stable sequence with low variability. The dataset follows the expected alignment patterns for this category.
+                 </p>
+              </div>
+              <button className="w-full flex items-center justify-between px-4 py-2 text-[10px] font-bold text-bloom-text-dim uppercase hover:text-bloom-black transition-colors border-t border-bloom-gray pt-4 mt-2">
+                 View Detailed Report
+                 <ChevronRight size={14} />
+              </button>
+            </GlassCard>
+          </div>
 
-          <section className="bg-white border border-bloom-gray rounded-3xl p-5 shadow-bloom-lg space-y-6">
+          <section className="bg-white border border-bloom-gray rounded-[32px] p-8 shadow-bloom-lg space-y-8">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h4 className="text-[10px] font-black text-bloom-black uppercase tracking-widest">Support Mix (D1)</h4>
-                <div className="w-1.5 h-1.5 rounded-full bg-bloom-purple animate-pulse" />
+                <h4 className="text-[11px] font-black text-bloom-black uppercase tracking-widest">Dimension A Distribution</h4>
+                <div className="w-1.5 h-1.5 rounded-full bg-bloom-purple" />
               </div>
               <BarDistribution data={supportDist} />
             </div>
 
-            <div className="space-y-4 pt-6 border-t border-bloom-gray">
+            <div className="space-y-4 pt-8 border-t border-bloom-gray">
               <div className="flex items-center justify-between">
-                <h4 className="text-[10px] font-black text-bloom-black uppercase tracking-widest">Strategy Mix (D3)</h4>
-                <div className="w-1.5 h-1.5 rounded-full bg-bloom-orange animate-pulse" />
+                <h4 className="text-[11px] font-black text-bloom-black uppercase tracking-widest">Dimension B Distribution</h4>
+                <div className="w-1.5 h-1.5 rounded-full bg-bloom-orange" />
               </div>
               <BarDistribution data={strategyDist} />
             </div>
           </section>
-
-          <GlassCard className="p-5 space-y-4">
-            <div className="flex items-center gap-2 text-bloom-black">
-              <Zap size={16} />
-              <h3 className="text-xs font-black uppercase tracking-widest">Analytical Notes</h3>
-            </div>
-            <div className="p-4 bg-bloom-yellow/10 rounded-xl border border-bloom-yellow/20">
-               <p className="text-[11px] text-bloom-text-dim leading-relaxed font-medium">
-                 High-paradox turns are absent in this sequence. The interaction follows a stable **supportive alignment** pattern.
-               </p>
-            </div>
-            <button className="w-full flex items-center justify-between px-4 py-2 text-[10px] font-bold text-bloom-text-dim uppercase hover:text-bloom-black transition-colors">
-               View Full Audit
-               <ChevronRight size={14} />
-            </button>
-          </GlassCard>
-        </aside>
+        </section>
       </div>
     </div>
   );

@@ -16,15 +16,15 @@ export const RoleTransitionLab: React.FC = () => {
   const tfNodes = [
     { id: 'Listener', group: 'passive' },
     { id: 'Advisor', group: 'active' },
-    { id: 'Advocate', group: 'supportive' },
+    { id: 'Coach', group: 'supportive' },
     { id: 'Navigator', group: 'active' },
     { id: 'Companion', group: 'passive' },
   ];
   const tfLinks = [
     { source: 'Listener', target: 'Advisor', value: 10 },
     { source: 'Advisor', target: 'Navigator', value: 8 },
-    { source: 'Navigator', target: 'Advocate', value: 5 },
-    { source: 'Advocate', target: 'Listener', value: 12 },
+    { source: 'Navigator', target: 'Coach', value: 5 },
+    { source: 'Coach', target: 'Listener', value: 12 },
     { source: 'Listener', target: 'Companion', value: 4 },
     { source: 'Advisor', target: 'Advisor', value: 15 }, // self-loop
   ];
@@ -35,8 +35,8 @@ export const RoleTransitionLab: React.FC = () => {
     { row: 'Advisor', col: 'Fact', value: 10 },
     { row: 'Listener', col: 'Affirmation', value: 20 },
     { row: 'Listener', col: 'Question', value: 18 },
-    { row: 'Advocate', col: 'Validation', value: 12 },
-    { row: 'Advocate', col: 'Question', value: 8 },
+    { row: 'Coach', col: 'Validation', value: 12 },
+    { row: 'Coach', col: 'Question', value: 8 },
   ];
 
   return (
@@ -90,7 +90,7 @@ export const RoleTransitionLab: React.FC = () => {
          <div className="bg-white rounded-[40px] p-8 border border-bloom-gray shadow-bloom-md">
            <CooccurrenceMatrix 
              data={d2xd3Data} 
-             rows={['Advisor', 'Listener', 'Advocate']} 
+             rows={['Advisor', 'Listener', 'Coach']} 
              cols={['Suggestion', 'Fact', 'Affirmation', 'Question', 'Validation']} 
              height={500} 
            />
