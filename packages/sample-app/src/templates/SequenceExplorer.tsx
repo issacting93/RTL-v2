@@ -97,9 +97,9 @@ export const SequenceExplorer: React.FC = () => {
                <Zap className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs font-bold text-bloom-black uppercase mb-1">Interactional Tip</p>
+              <p className="text-xs font-bold text-bloom-black uppercase mb-1">Tip</p>
               <p className="text-xs text-bloom-text-dim font-medium leading-relaxed">
-                Click any cell in the timeline to highlight the corresponding turn in the transcript. Observe how Participation Roles (D2) often precede specific Strategy shifts (D3).
+                Click any cell in the timeline to highlight the corresponding turn in the transcript. Observe how Label 02 values often precede specific Label 03 shifts.
               </p>
             </div>
           </div>
@@ -126,7 +126,7 @@ export const SequenceExplorer: React.FC = () => {
                   >
                     <div className="flex justify-between items-center mb-2">
                        <span className={`text-[9px] font-black uppercase tracking-widest ${turn.d2 === 'Seeker' ? 'text-bloom-orange' : 'text-bloom-black'}`}>
-                        {turn.d2 === 'Seeker' ? 'User (Subject)' : `Participant (${turn.d2})`}
+                        {turn.d2 === 'Seeker' ? 'Participant A' : `Participant B (${turn.d2})`}
                        </span>
                        <span className="text-[9px] font-bold text-bloom-text-dim">#{turn.idx}</span>
                     </div>

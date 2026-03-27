@@ -43,11 +43,40 @@ import { AffectivePortrait } from './templates/AffectivePortrait';
 import { RoleTransitionLab } from './templates/RoleTransitionLab';
 import { CalibrationSuite } from './templates/CalibrationSuite';
 import { InteractionCartography } from './templates/InteractionCartography';
-import { MOCK_GRAPH_DATA } from './templates/mockData';
+// mockData is used by template components directly
 
 // ── Generate dummy data ─────────────────────────────────────────
-const CONVERSATIONS = generateMockDataset(5, 16);
-const HEATMAP = generateMockHeatmap();
+const CONVERSATIONS = generateMockDataset(10, 16);
+
+const DIM_LABELS: Record<string, string> = {
+  d1: 'Label 01',
+  d2: 'Label 02',
+  d3: 'Label 03',
+};
+const DIM_IDS = ['d1', 'd2', 'd3'] as const;
+type DimId = typeof DIM_IDS[number];
+
+/** Build a force-graph data structure from a single conversation. */
+function buildGraphFromConversation(conv: Conversation) {
+  const nodes: any[] = [{ id: conv.id, node_type: 'Conversation', label: conv.title || conv.id }];
+  const links: any[] = [];
+  const seenRoles = new Set<string>();
+
+  conv.messages.forEach((m, i) => {
+    const tid = `turn_${i}`;
+    nodes.push({ id: tid, node_type: 'Turn', turn_index: i, speaker: m.speaker });
+    links.push({ source: conv.id, target: tid, edge_type: 'CONTAINS' });
+    if (i > 0) links.push({ source: `turn_${i - 1}`, target: tid, edge_type: 'NEXT' });
+
+    const role = m.role || 'Unknown';
+    if (!seenRoles.has(role)) {
+      seenRoles.add(role);
+      nodes.push({ id: `role_${role}`, node_type: 'Move', label: role });
+    }
+    links.push({ source: tid, target: `role_${role}`, edge_type: 'CONTAINS' });
+  });
+  return { nodes, links };
+}
 
 type ComponentId = 
   | 'welcome' 
@@ -145,7 +174,7 @@ const STORIES: Story[] = [
     label: 'State Transition Flow',
     category: 'Viz',
     description: 'Sankey-style diagram rendering an N\u00d7N transition matrix as weighted flows between categorical states.',
-    useCase: 'Analyzing sequential dependencies — e.g., how often a Listener role transitions to Advisor, including self-loops.'
+    useCase: 'Analyzing sequential dependencies — e.g., how often one role transitions to another, including self-loops.'
   },
   {
     id: 'heatmap',
@@ -202,10 +231,21 @@ export default function App() {
   const [activeStoryId, setActiveStoryId] = useState<ComponentId>('welcome');
   const [activeConv, setActiveConv] = useState<Conversation>(CONVERSATIONS[0]);
   const [activeMsg, setActiveMsg] = useState<string | undefined>();
-  
+
+  // ── Viz control state ───────────────────────────────────────
+  const [vizGraphConv, setVizGraphConv] = useState(0);
+  const [vizTransDim, setVizTransDim] = useState<DimId>('d2');
+  const [vizHeatRow, setVizHeatRow] = useState<DimId>('d2');
+  const [vizHeatCol, setVizHeatCol] = useState<DimId>('d3');
+  const [vizPortraitDim, setVizPortraitDim] = useState<DimId>('d2');
+  const [vizPortraitCount, setVizPortraitCount] = useState(5);
+  const [vizTrackDims, setVizTrackDims] = useState({ d1: true, d2: true, d3: true });
+  const [vizTrackCellSize, setVizTrackCellSize] = useState(18);
+  const [vizTrackConv, setVizTrackConv] = useState(0);
+
   // ── Derived data for viz ────────────────────────────────────
   const metrics = useMemo(() => calculateConversationMetrics(activeConv), [activeConv]);
-  
+
   const roleCounts = useMemo(() => {
     const raw = countsBy(
       activeConv.messages.map(m => ({ id: m.id, role: m.role || 'Unknown' })),
@@ -218,43 +258,68 @@ export default function App() {
     }));
   }, [activeConv]);
 
+  const graphData = useMemo(
+    () => buildGraphFromConversation(CONVERSATIONS[vizGraphConv] || CONVERSATIONS[0]),
+    [vizGraphConv]
+  );
+
   const multiTracks = useMemo(() => {
-    const dims = ['d1', 'd2', 'd3'] as const;
-    return dims.map(dim => {
-      const dimDef = DEFAULT_TAXONOMY.dimensions.find(d => d.id === dim)!;
+    const conv = CONVERSATIONS[vizTrackConv] || CONVERSATIONS[0];
+    return DIM_IDS.filter(d => vizTrackDims[d]).map(dim => {
       return {
         id: dim,
-        label: dim.toUpperCase(),
-        cells: activeConv.messages.map(m => {
+        label: DIM_LABELS[dim],
+        cells: conv.messages.map(m => {
           const val = m.metadata?.[dim] || 'Unknown';
-            return {
-              value: String(val),
-              color: colorFor(DEFAULT_TAXONOMY, dim, val as string),
-              tooltip: `${dimDef.label}: ${val}`,
-            };
+          return {
+            value: String(val),
+            color: colorFor(DEFAULT_TAXONOMY, dim, val as string),
+            tooltip: `${DIM_LABELS[dim]}: ${val}`,
+          };
         }),
       };
     });
-  }, [activeConv]);
+  }, [vizTrackConv, vizTrackDims]);
 
   const transitionMatrix = useMemo(() => {
+    const dimKey = vizTransDim;
     const sequences = CONVERSATIONS.map(c =>
-      c.messages.map(m => ({ id: m.id, role: m.role || 'Unknown' }))
+      c.messages.map(m => ({
+        id: m.id,
+        val: String(m.metadata?.[dimKey] || m.role || 'Unknown'),
+      }))
     );
-    return computeTransitionMatrix(sequences, 'role');
-  }, []);
+    return computeTransitionMatrix(sequences, 'val');
+  }, [vizTransDim]);
+
+  const transitionColorMap = useMemo(() => {
+    const dimIdx = DIM_IDS.indexOf(vizTransDim);
+    return Object.fromEntries(
+      DEFAULT_TAXONOMY.dimensions[dimIdx].categories.map(c => [c.name, c.color])
+    );
+  }, [vizTransDim]);
+
+  const heatmapData = useMemo(() => {
+    const rowDim = DEFAULT_TAXONOMY.dimensions[DIM_IDS.indexOf(vizHeatRow)];
+    const colDim = DEFAULT_TAXONOMY.dimensions[DIM_IDS.indexOf(vizHeatCol)];
+    return {
+      data: generateMockHeatmap(rowDim.categories.map(c => c.name), colDim.categories.map(c => c.name)),
+      rows: rowDim.categories.map(c => c.name),
+      cols: colDim.categories.map(c => c.name),
+    };
+  }, [vizHeatRow, vizHeatCol]);
 
   const portraitRows = useMemo(() => {
-    return CONVERSATIONS.map(conv => ({
+    return CONVERSATIONS.slice(0, vizPortraitCount).map(conv => ({
       id: conv.id,
       label: conv.title || conv.id,
       group: conv.messages[0]?.role || 'Unknown',
       cells: conv.messages.map(m => ({
-        color: colorFor(DEFAULT_TAXONOMY, 'd2', m.role || 'Unknown'),
-        tooltip: `${m.speaker}: ${m.role}`,
+        color: colorFor(DEFAULT_TAXONOMY, vizPortraitDim, String(m.metadata?.[vizPortraitDim] || m.role || 'Unknown')),
+        tooltip: `${m.speaker}: ${m.metadata?.[vizPortraitDim] || m.role}`,
       })),
     }));
-  }, []);
+  }, [vizPortraitDim, vizPortraitCount]);
 
   const activeStory = STORIES.find(s => s.id === activeStoryId)!;
 
@@ -373,33 +438,93 @@ export default function App() {
                 )}
 
                 {activeStoryId === 'radial-layout' && (
-                  <TopologyNetwork 
-                    data={MOCK_GRAPH_DATA} 
-                    width={400} 
-                    height={400} 
-                    onNodeClick={node => setActiveMsg(node.id)}
-                  />
+                  <div className="w-full space-y-4">
+                    <div className="flex items-center gap-4 flex-wrap px-4 py-3 bg-bloom-bg-subtle rounded-xl border border-bloom-gray">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-bloom-text-dim">Source</span>
+                      <select
+                        value={vizGraphConv}
+                        onChange={e => setVizGraphConv(Number(e.target.value))}
+                        className="px-3 py-1.5 text-xs font-bold bg-white border border-bloom-gray rounded-lg focus:ring-2 focus:ring-bloom-yellow outline-none"
+                      >
+                        {CONVERSATIONS.map((c, i) => (
+                          <option key={c.id} value={i}>Dataset {String(i + 1).padStart(2, '0')}</option>
+                        ))}
+                      </select>
+                      <span className="text-[10px] text-bloom-text-dim ml-auto">{graphData.nodes.length} nodes · {graphData.links.length} edges</span>
+                    </div>
+                    <div className="flex justify-center">
+                      <TopologyNetwork
+                        data={graphData}
+                        width={500}
+                        height={500}
+                        onNodeClick={node => setActiveMsg(node.id)}
+                      />
+                    </div>
+                  </div>
                 )}
 
                 {activeStoryId === 'transition-flow' && (
-                  <StateTransitionFlow
-                    matrix={transitionMatrix}
-                    width={500}
-                    height={400}
-                    colorMap={Object.fromEntries(
-                      DEFAULT_TAXONOMY.dimensions[1].categories.map(c => [c.name, c.color])
-                    )}
-                  />
+                  <div className="w-full space-y-4">
+                    <div className="flex items-center gap-4 flex-wrap px-4 py-3 bg-bloom-bg-subtle rounded-xl border border-bloom-gray">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-bloom-text-dim">Dimension</span>
+                      {DIM_IDS.map(d => (
+                        <button
+                          key={d}
+                          onClick={() => setVizTransDim(d)}
+                          className={`px-3 py-1.5 rounded-lg text-[10px] font-bold border transition-all ${
+                            vizTransDim === d
+                              ? 'bg-bloom-black text-white border-bloom-black'
+                              : 'bg-white text-bloom-text-dim border-bloom-gray hover:border-bloom-black'
+                          }`}
+                        >
+                          {DIM_LABELS[d]}
+                        </button>
+                      ))}
+                      <span className="text-[10px] text-bloom-text-dim ml-auto">{transitionMatrix.labels.length} states</span>
+                    </div>
+                    <StateTransitionFlow
+                      matrix={transitionMatrix}
+                      width={500}
+                      height={400}
+                      colorMap={transitionColorMap}
+                    />
+                  </div>
                 )}
 
                 {activeStoryId === 'heatmap' && (
-                  <CooccurrenceMatrix
-                    data={HEATMAP}
-                    rows={DEFAULT_TAXONOMY.dimensions[1].categories.map(c => c.name)}
-                    cols={DEFAULT_TAXONOMY.dimensions[2].categories.map(c => c.name)}
-                    width={500}
-                    height={380}
-                  />
+                  <div className="w-full space-y-4">
+                    <div className="flex items-center gap-4 flex-wrap px-4 py-3 bg-bloom-bg-subtle rounded-xl border border-bloom-gray">
+                      <label className="flex items-center gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-bloom-text-dim">Rows</span>
+                        <select
+                          value={vizHeatRow}
+                          onChange={e => setVizHeatRow(e.target.value as DimId)}
+                          className="px-3 py-1.5 text-xs font-bold bg-white border border-bloom-gray rounded-lg focus:ring-2 focus:ring-bloom-yellow outline-none"
+                        >
+                          {DIM_IDS.map(d => <option key={d} value={d}>{DIM_LABELS[d]}</option>)}
+                        </select>
+                      </label>
+                      <span className="text-bloom-text-dim">×</span>
+                      <label className="flex items-center gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-bloom-text-dim">Cols</span>
+                        <select
+                          value={vizHeatCol}
+                          onChange={e => setVizHeatCol(e.target.value as DimId)}
+                          className="px-3 py-1.5 text-xs font-bold bg-white border border-bloom-gray rounded-lg focus:ring-2 focus:ring-bloom-yellow outline-none"
+                        >
+                          {DIM_IDS.map(d => <option key={d} value={d}>{DIM_LABELS[d]}</option>)}
+                        </select>
+                      </label>
+                      <span className="text-[10px] text-bloom-text-dim ml-auto">{heatmapData.rows.length} × {heatmapData.cols.length}</span>
+                    </div>
+                    <CooccurrenceMatrix
+                      data={heatmapData.data}
+                      rows={heatmapData.rows}
+                      cols={heatmapData.cols}
+                      width={500}
+                      height={380}
+                    />
+                  </div>
                 )}
 
                 {activeStoryId === 'transcript' && (
@@ -459,19 +584,89 @@ export default function App() {
                 )}
 
                 {activeStoryId === 'document-portrait' && (
-                   <div className="w-full bg-white p-6 border border-bloom-gray rounded-xl">
+                  <div className="w-full space-y-4">
+                    <div className="flex items-center gap-6 flex-wrap px-4 py-3 bg-bloom-bg-subtle rounded-xl border border-bloom-gray">
+                      <label className="flex items-center gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-bloom-text-dim">Color by</span>
+                        <select
+                          value={vizPortraitDim}
+                          onChange={e => setVizPortraitDim(e.target.value as DimId)}
+                          className="px-3 py-1.5 text-xs font-bold bg-white border border-bloom-gray rounded-lg focus:ring-2 focus:ring-bloom-yellow outline-none"
+                        >
+                          {DIM_IDS.map(d => <option key={d} value={d}>{DIM_LABELS[d]}</option>)}
+                        </select>
+                      </label>
+                      <label className="flex items-center gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-bloom-text-dim">Conversations</span>
+                        <input
+                          type="range"
+                          min={1}
+                          max={10}
+                          value={vizPortraitCount}
+                          onChange={e => setVizPortraitCount(Number(e.target.value))}
+                          className="w-24 accent-bloom-black"
+                        />
+                        <span className="text-xs font-bold text-bloom-black w-4">{vizPortraitCount}</span>
+                      </label>
+                    </div>
+                    <div className="w-full bg-white p-6 border border-bloom-gray rounded-xl">
                       <DocumentPortrait
                         rows={portraitRows}
                         rowHeight={10}
                         onRowClick={id => alert(`Focusing on Doc: ${id}`)}
                       />
-                   </div>
+                    </div>
+                  </div>
                 )}
 
                 {activeStoryId === 'multi-track' && (
-                   <div className="w-full bg-white p-8 border border-bloom-gray rounded-xl shadow-inner overflow-x-auto">
-                      <MultiTrackTimeline tracks={multiTracks} cellSize={18} />
-                   </div>
+                  <div className="w-full space-y-4">
+                    <div className="flex items-center gap-6 flex-wrap px-4 py-3 bg-bloom-bg-subtle rounded-xl border border-bloom-gray">
+                      <label className="flex items-center gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-bloom-text-dim">Source</span>
+                        <select
+                          value={vizTrackConv}
+                          onChange={e => setVizTrackConv(Number(e.target.value))}
+                          className="px-3 py-1.5 text-xs font-bold bg-white border border-bloom-gray rounded-lg focus:ring-2 focus:ring-bloom-yellow outline-none"
+                        >
+                          {CONVERSATIONS.map((c, i) => (
+                            <option key={c.id} value={i}>Dataset {String(i + 1).padStart(2, '0')}</option>
+                          ))}
+                        </select>
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-bloom-text-dim">Layers</span>
+                        {DIM_IDS.map(d => (
+                          <button
+                            key={d}
+                            onClick={() => setVizTrackDims(prev => ({ ...prev, [d]: !prev[d] }))}
+                            className={`px-3 py-1.5 rounded-lg text-[10px] font-bold border transition-all ${
+                              vizTrackDims[d]
+                                ? 'bg-bloom-black text-white border-bloom-black'
+                                : 'bg-white text-bloom-text-dim border-bloom-gray hover:border-bloom-black'
+                            }`}
+                          >
+                            {DIM_LABELS[d]}
+                          </button>
+                        ))}
+                      </div>
+                      <label className="flex items-center gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-bloom-text-dim">Size</span>
+                        <input
+                          type="range"
+                          min={10}
+                          max={32}
+                          value={vizTrackCellSize}
+                          onChange={e => setVizTrackCellSize(Number(e.target.value))}
+                          className="w-20 accent-bloom-black"
+                        />
+                        <span className="text-xs font-bold text-bloom-black w-6">{vizTrackCellSize}px</span>
+                      </label>
+                    </div>
+                    <div className="w-full bg-white p-8 border border-bloom-gray rounded-xl shadow-inner overflow-x-auto">
+                      <MultiTrackTimeline tracks={multiTracks} cellSize={vizTrackCellSize} />
+                    </div>
+                  </div>
                 )}
 
                 {activeStoryId === 'tpl-corpus' && <div className="w-full"><CorpusAudit /></div>}

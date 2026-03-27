@@ -9,7 +9,7 @@ export const AffectivePortrait: React.FC = () => {
     { label: 'Avg Pleasure', value: '+0.42', icon: <Heart className="w-5 h-5" />, detail: 'Overall sentiment score' },
     { label: 'Peak Arousal', value: '0.85', icon: <Zap className="w-5 h-5" />, detail: 'Max emotional intensity' },
     { label: 'Dominance Delta', value: '15%', icon: <BarChart className="w-5 h-5" />, detail: 'Difference in participation' },
-    { label: 'Affective Stability', value: 'High', icon: <User className="w-5 h-5" />, detail: 'Emotional consistency' },
+    { label: 'Stability', value: 'High', icon: <User className="w-5 h-5" />, detail: 'Consistency score' },
   ];
 
   return (
@@ -76,11 +76,11 @@ export const AffectivePortrait: React.FC = () => {
                  id: 'Portrait_1',
                  label: 'Sequence Overview',
                  cells: [
-                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Companion'), tooltip: 'Opening' },
-                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Listener'), tooltip: 'Emotion Discovery' },
-                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Coach'), tooltip: 'Problem Exploration' },
-                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Reflective Partner'), tooltip: 'Action Planning' },
-                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Navigator'), tooltip: 'Closing' },
+                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Role 05'), tooltip: 'Phase 1' },
+                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Role 01'), tooltip: 'Phase 2' },
+                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Role 03'), tooltip: 'Phase 3' },
+                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Role 02'), tooltip: 'Phase 4' },
+                   { color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Role 06'), tooltip: 'Phase 5' },
                  ]
                }]}
                rowHeight={40}

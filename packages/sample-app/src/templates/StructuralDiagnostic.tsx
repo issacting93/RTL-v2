@@ -72,14 +72,14 @@ export const StructuralDiagnostic: React.FC = () => {
                 <div className="space-y-2">
                    <div className="flex justify-between text-[11px] font-bold">
                       <span className="text-bloom-text-dim">CONSTRAINT</span>
-                      <span className="text-bloom-black">C1: Accountability</span>
+                      <span className="text-bloom-black">C1: Constraint 01</span>
                    </div>
                    <div className="flex justify-between text-[11px] font-bold">
                       <span className="text-bloom-text-dim">TURN</span>
                       <span className="text-bloom-black">#12</span>
                    </div>
                    <p className="text-[11px] text-bloom-text-dim leading-relaxed pt-2">
-                      Agent provided unsolicited advice without explicit user request, violating the 'Accountability' constraint.
+                      A structural violation was detected at this turn, breaking the active constraint rule.
                    </p>
                 </div>
              </div>
@@ -94,14 +94,14 @@ export const StructuralDiagnostic: React.FC = () => {
                 <div className="space-y-2">
                    <div className="flex justify-between text-[11px] font-bold">
                       <span className="text-bloom-text-dim">CONSTRAINT</span>
-                      <span className="text-bloom-black">C1: Accountability</span>
+                      <span className="text-bloom-black">C1: Constraint 01</span>
                    </div>
                    <div className="flex justify-between text-[11px] font-bold">
                       <span className="text-bloom-text-dim">TURN</span>
                       <span className="text-bloom-black">#15</span>
                    </div>
                    <p className="text-[11px] text-bloom-text-dim leading-relaxed pt-2">
-                      Agent successfully repaired the previous violation by explicitly acknowledging the user's agency.
+                      The previous violation was successfully repaired through a corrective interaction at this turn.
                    </p>
                 </div>
              </div>

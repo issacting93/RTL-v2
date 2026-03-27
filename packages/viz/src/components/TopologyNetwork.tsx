@@ -40,6 +40,16 @@ const NODE_RADII: { [key: string]: number } = {
   'InteractionMode': 10
 };
 
+/** Google Material Symbols icon names for each node type. */
+const NODE_ICONS: { [key: string]: string } = {
+  'Conversation': 'forum',
+  'Turn': 'chat_bubble',
+  'Move': 'swap_horiz',
+  'Constraint': 'gavel',
+  'ViolationEvent': 'warning',
+  'InteractionMode': 'hub',
+};
+
 export const TopologyNetwork: React.FC<TopologyNetworkProps> = ({
   data,
   activeTypes = new Set(['Conversation', 'Turn', 'Move', 'Constraint', 'ViolationEvent']),
@@ -156,6 +166,17 @@ export const TopologyNetwork: React.FC<TopologyNetworkProps> = ({
       .attr('stroke-width', 1.5)
       .style('cursor', 'pointer')
       .on('click', (event, d) => onNodeClick?.(d as GraphNode));
+
+    // Material Symbols icon inside each node
+    node.append('text')
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'central')
+      .attr('fill', 'white')
+      .style('font-family', '"Material Symbols Outlined"')
+      .style('font-size', d => `${Math.max((NODE_RADII[d.node_type] || 10) - 2, 6)}px`)
+      .style('pointer-events', 'none')
+      .style('user-select', 'none')
+      .text(d => NODE_ICONS[d.node_type] || 'circle');
 
     if (showLabels) {
       node.append('text')

@@ -1,50 +1,50 @@
 // Mock Data for RTL v2.1 Template Expansion
 
 export const MOCK_CORPUS_TURNS = [
-  { d1: 'Emotional', d2: 'Listener', d3: 'Question' },
-  { d1: 'Emotional', d2: 'Listener', d3: 'Affirmation' },
-  { d1: 'Informational', d2: 'Advisor', d3: 'Suggestion' },
-  { d1: 'Informational', d2: 'Advisor', d3: 'Fact' },
-  { d1: 'Emotional', d2: 'Coach', d3: 'Validation' },
-  { d1: 'Informational', d2: 'Navigator', d3: 'Structure' },
-  { d1: 'Emotional', d2: 'Companion', d3: 'Self-disclosure' },
-  { d1: 'Emotional', d2: 'Listener', d3: 'Question' },
-  { d1: 'Informational', d2: 'Advisor', d3: 'Suggestion' },
-  { d1: 'Emotional', d2: 'Coach', d3: 'Validation' },
-  { d1: 'Informational', d2: 'Navigator', d3: 'Structure' },
-  { d1: 'Emotional', d2: 'Companion', d3: 'Self-disclosure' },
+  { d1: 'Type A', d2: 'Role 01', d3: 'Strategy A' },
+  { d1: 'Type A', d2: 'Role 01', d3: 'Strategy D' },
+  { d1: 'Type B', d2: 'Role 04', d3: 'Strategy E' },
+  { d1: 'Type B', d2: 'Role 04', d3: 'Strategy F' },
+  { d1: 'Type A', d2: 'Role 03', d3: 'Strategy B' },
+  { d1: 'Type B', d2: 'Role 06', d3: 'Strategy G' },
+  { d1: 'Type A', d2: 'Role 05', d3: 'Strategy C' },
+  { d1: 'Type A', d2: 'Role 01', d3: 'Strategy A' },
+  { d1: 'Type B', d2: 'Role 04', d3: 'Strategy E' },
+  { d1: 'Type A', d2: 'Role 03', d3: 'Strategy B' },
+  { d1: 'Type B', d2: 'Role 06', d3: 'Strategy G' },
+  { d1: 'Type A', d2: 'Role 05', d3: 'Strategy C' },
   // Adding more for statistical significance in Mosaic/Parallel Sets
-  ...Array(20).fill({ d1: 'Emotional', d2: 'Listener', d3: 'Affirmation' }),
-  ...Array(15).fill({ d1: 'Informational', d2: 'Advisor', d3: 'Suggestion' }),
-  ...Array(10).fill({ d1: 'Informational', d2: 'Navigator', d3: 'Structure' }),
-  ...Array(8).fill({ d1: 'Emotional', d2: 'Coach', d3: 'Question' }),
+  ...Array(20).fill({ d1: 'Type A', d2: 'Role 01', d3: 'Strategy D' }),
+  ...Array(15).fill({ d1: 'Type B', d2: 'Role 04', d3: 'Strategy E' }),
+  ...Array(10).fill({ d1: 'Type B', d2: 'Role 06', d3: 'Strategy G' }),
+  ...Array(8).fill({ d1: 'Type A', d2: 'Role 03', d3: 'Strategy A' }),
 ];
 
 export const MOCK_SEQUENCE_TURNS = [
-  { idx: 0, text: "I've been feeling really overwhelmed lately.", d1: 'Emotional', d2: 'Seeker', d3: 'Disclosure' },
-  { idx: 1, text: "I hear you. That sounds really tough.", d1: 'Emotional', d2: 'Listener', d3: 'Affirmation' },
-  { idx: 2, text: "Can you tell me more about what's causing that?", d1: 'Emotional', d2: 'Listener', d3: 'Question' },
-  { idx: 3, text: "Mainly work, it just never stops.", d1: 'Emotional', d2: 'Seeker', d3: 'Disclosure' },
-  { idx: 4, text: "Maybe we could look at your schedule together?", d1: 'Informational', d2: 'Advisor', d3: 'Suggestion' },
-  { idx: 5, text: "Actually, let's start with your priority list.", d1: 'Informational', d2: 'Navigator', d3: 'Structure' },
-  { idx: 6, text: "I think that would help, thank you.", d1: 'Emotional', d2: 'Seeker', d3: 'Validation' },
-  { idx: 7, text: "You're doing great, we'll figure it out.", d1: 'Emotional', d2: 'Coach', d3: 'Validation' },
+  { idx: 0, text: "Sample turn from participant A.", d1: 'Type A', d2: 'Seeker', d3: 'Strategy C' },
+  { idx: 1, text: "Acknowledged. Following up on that.", d1: 'Type A', d2: 'Role 01', d3: 'Strategy D' },
+  { idx: 2, text: "Can you elaborate on that point?", d1: 'Type A', d2: 'Role 01', d3: 'Strategy A' },
+  { idx: 3, text: "Sure — it relates to the earlier topic.", d1: 'Type A', d2: 'Seeker', d3: 'Strategy C' },
+  { idx: 4, text: "One option would be to restructure that.", d1: 'Type B', d2: 'Role 04', d3: 'Strategy E' },
+  { idx: 5, text: "Let's start by prioritising the items.", d1: 'Type B', d2: 'Role 06', d3: 'Strategy G' },
+  { idx: 6, text: "That approach works well, thanks.", d1: 'Type A', d2: 'Seeker', d3: 'Strategy B' },
+  { idx: 7, text: "Great progress — let's keep going.", d1: 'Type A', d2: 'Role 03', d3: 'Strategy B' },
 ];
 
 export const MOCK_SEQUENCE_ROLES = [
-  { start: 0, end: 3, role: 'Listener' },
-  { start: 4, end: 5, role: 'Advisor' },
-  { start: 6, end: 7, role: 'Coach' }
+  { start: 0, end: 3, role: 'Role 01' },
+  { start: 4, end: 5, role: 'Role 04' },
+  { start: 6, end: 7, role: 'Role 03' }
 ];
 
 export const MOCK_LIFECYCLE_EVENTS = [
-  { idx: 5, type: 'trigger', label: 'Seeking Advice', constraintId: 'C1: Accountability' },
-  { idx: 12, type: 'violation', label: 'Unsolicited Direction', constraintId: 'C1: Accountability' },
-  { idx: 15, type: 'repair', label: 'Softening Statement', constraintId: 'C1: Accountability' },
-  { idx: 2, type: 'trigger', label: 'Opening Greeting', constraintId: 'C2: Politeness' },
-  { idx: 25, type: 'ratify', label: 'Mutual Closure', constraintId: 'C2: Politeness' },
-  { idx: 10, type: 'info', label: 'Topic Shift', constraintId: 'C3: Topic Coherence' },
-  { idx: 18, type: 'violation', label: 'Abrupt Interruption', constraintId: 'C3: Topic Coherence' },
+  { idx: 5, type: 'trigger', label: 'Event Trigger A', constraintId: 'C1: Constraint 01' },
+  { idx: 12, type: 'violation', label: 'Violation Event A', constraintId: 'C1: Constraint 01' },
+  { idx: 15, type: 'repair', label: 'Repair Event A', constraintId: 'C1: Constraint 01' },
+  { idx: 2, type: 'trigger', label: 'Event Trigger B', constraintId: 'C2: Constraint 02' },
+  { idx: 25, type: 'ratify', label: 'Ratification B', constraintId: 'C2: Constraint 02' },
+  { idx: 10, type: 'info', label: 'Info Event C', constraintId: 'C3: Constraint 03' },
+  { idx: 18, type: 'violation', label: 'Violation Event C', constraintId: 'C3: Constraint 03' },
 ];
 
 export const MOCK_PAD_DATA = Array.from({ length: 30 }, (_, i) => ({
@@ -61,11 +61,11 @@ export const MOCK_PARADOX_STATS = {
 };
 
 export const MOCK_STABILITY_DATA = {
-  'Agency Collapse': { n: 42 },
-  'Constraint Drift': { n: 156 },
-  'No Constraints': { n: 89 },
-  'Task Maintained': { n: 412 },
-  'Task Shift': { n: 98 }
+  'Class A': { n: 42 },
+  'Class B': { n: 156 },
+  'Class C': { n: 89 },
+  'Class D': { n: 412 },
+  'Class E': { n: 98 }
 };
 
 export const MOCK_VIOLATION_TIMING = {
@@ -75,37 +75,37 @@ export const MOCK_VIOLATION_TIMING = {
 
 export const MOCK_ROLE_DISTRIBUTION = {
   human: {
-    'Listener': 0.45,
-    'Reflective Partner': 0.25,
-    'Coach': 0.15,
-    'Advisor': 0.1,
-    'Companion': 0.05
+    'Role 01': 0.45,
+    'Role 02': 0.25,
+    'Role 03': 0.15,
+    'Role 04': 0.1,
+    'Role 05': 0.05
   },
   ai: {
-    'Advisor': 0.4,
-    'Coach': 0.3,
-    'Navigator': 0.2,
-    'Listener': 0.1
+    'Role 04': 0.4,
+    'Role 03': 0.3,
+    'Role 06': 0.2,
+    'Role 01': 0.1
   }
 };
 
 export const MOCK_CALIBRATION_ITEMS = [
-  { id: 'seq_1', external_id: 'CONV-A72', turn_range: '1-12', stance: 'Passive', status: 'coded', coder_count: 3 },
-  { id: 'seq_2', external_id: 'CONV-B15', turn_range: '4-8', stance: 'Exploratory', status: 'partially_coded', coder_count: 1 },
-  { id: 'seq_3', external_id: 'CONV-C44', turn_range: '10-25', stance: null, status: 'pending' },
-  { id: 'seq_4', external_id: 'CONV-D99', turn_range: '2-15', stance: 'Active', status: 'coded', coder_count: 2 },
-  { id: 'seq_5', external_id: 'CONV-E01', turn_range: '5-20', stance: null, status: 'pending' }
+  { id: 'seq_1', external_id: 'SEQ-001', turn_range: '1-12', stance: 'Passive', status: 'coded', coder_count: 3 },
+  { id: 'seq_2', external_id: 'SEQ-002', turn_range: '4-8', stance: 'Exploratory', status: 'partially_coded', coder_count: 1 },
+  { id: 'seq_3', external_id: 'SEQ-003', turn_range: '10-25', stance: null, status: 'pending' },
+  { id: 'seq_4', external_id: 'SEQ-004', turn_range: '2-15', stance: 'Active', status: 'coded', coder_count: 2 },
+  { id: 'seq_5', external_id: 'SEQ-005', turn_range: '5-20', stance: null, status: 'pending' }
 ];
 
 export const MOCK_GRAPH_DATA = {
   nodes: [
-    { id: 'conv_1', node_type: 'Conversation', label: 'Case Study A' },
+    { id: 'conv_1', node_type: 'Conversation', label: 'Dataset 01' },
     { id: 'turn_1', node_type: 'Turn', turn_index: 1, speaker: 'user' },
     { id: 'turn_2', node_type: 'Turn', turn_index: 2, speaker: 'assistant' },
     { id: 'turn_3', node_type: 'Turn', turn_index: 3, speaker: 'user' },
-    { id: 'move_1', node_type: 'Move', label: 'Disclosure' },
-    { id: 'c_1', node_type: 'Constraint', label: 'Empathy' },
-    { id: 'v_1', node_type: 'ViolationEvent', label: 'Unsolicited Advice' }
+    { id: 'move_1', node_type: 'Move', label: 'Move 01' },
+    { id: 'c_1', node_type: 'Constraint', label: 'Constraint 01' },
+    { id: 'v_1', node_type: 'ViolationEvent', label: 'Violation 01' }
   ],
   links: [
     { source: 'conv_1', target: 'turn_1', edge_type: 'CONTAINS' },

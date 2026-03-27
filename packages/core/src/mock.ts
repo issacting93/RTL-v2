@@ -4,42 +4,42 @@ import { Message, Conversation, TaxonomyDimension, Taxonomy, HeatmapCell } from 
 
 const D1_SUPPORT: TaxonomyDimension = {
   id: 'd1',
-  label: 'Support Type',
+  label: 'Label 01',
   categories: [
-    { name: 'Emotional', color: '#5b8def', description: 'Empathy, sympathy, or concern.' },
-    { name: 'Informational', color: '#16a34a', description: 'Advice, suggestions, guidance.' },
-    { name: 'Appraisal', color: '#8b5cf6', description: 'Helping reframe or reinterpret.' },
-    { name: 'Esteem', color: '#f59e0b', description: "Affirming the recipient's worth." },
-    { name: 'Network', color: '#0ea5a4', description: 'Connecting to others or communities.' },
-    { name: 'Tangible', color: '#e11d48', description: 'Concrete, practical assistance.' },
+    { name: 'Type A', color: '#5b8def', description: 'Category A of dimension 1.' },
+    { name: 'Type B', color: '#16a34a', description: 'Category B of dimension 1.' },
+    { name: 'Type C', color: '#8b5cf6', description: 'Category C of dimension 1.' },
+    { name: 'Type D', color: '#f59e0b', description: 'Category D of dimension 1.' },
+    { name: 'Type E', color: '#0ea5a4', description: 'Category E of dimension 1.' },
+    { name: 'Type F', color: '#e11d48', description: 'Category F of dimension 1.' },
   ],
 };
 
 const D2_ROLES: TaxonomyDimension = {
   id: 'd2',
-  label: 'Care Role',
+  label: 'Label 02',
   categories: [
-    { name: 'Listener', color: '#5b8def', tier: 'Low', description: 'Receptive, non-directive.' },
-    { name: 'Reflective Partner', color: '#8b5cf6', tier: 'Low', description: 'Socratic, exploratory.' },
-    { name: 'Coach', color: '#f59e0b', tier: 'Moderate', description: 'Directive, motivating.' },
-    { name: 'Advisor', color: '#e11d48', tier: 'High', description: 'Authoritative, expertise-led.' },
-    { name: 'Companion', color: '#64748b', tier: 'Low', description: 'Warm relational presence.' },
-    { name: 'Navigator', color: '#0ea5a4', tier: 'High', description: 'Practical, resource-oriented.' },
+    { name: 'Role 01', color: '#5b8def', tier: 'Low', description: 'Role 01 description.' },
+    { name: 'Role 02', color: '#8b5cf6', tier: 'Low', description: 'Role 02 description.' },
+    { name: 'Role 03', color: '#f59e0b', tier: 'Moderate', description: 'Role 03 description.' },
+    { name: 'Role 04', color: '#e11d48', tier: 'High', description: 'Role 04 description.' },
+    { name: 'Role 05', color: '#64748b', tier: 'Low', description: 'Role 05 description.' },
+    { name: 'Role 06', color: '#0ea5a4', tier: 'High', description: 'Role 06 description.' },
   ],
 };
 
 const D3_STRATEGIES: TaxonomyDimension = {
   id: 'd3',
-  label: 'Strategy',
+  label: 'Label 03',
   categories: [
-    { name: 'Question', color: '#5b8def' },
-    { name: 'Reflective Listening', color: '#8b5cf6' },
-    { name: 'Self-disclosure', color: '#0ea5a4' },
-    { name: 'Affirmation', color: '#16a34a' },
-    { name: 'Providing Suggestions', color: '#f59e0b' },
-    { name: 'Information Sharing', color: '#e11d48' },
-    { name: 'Reframing', color: '#64748b' },
-    { name: 'Sympathy', color: '#ec4899' },
+    { name: 'Strategy A', color: '#5b8def' },
+    { name: 'Strategy B', color: '#8b5cf6' },
+    { name: 'Strategy C', color: '#0ea5a4' },
+    { name: 'Strategy D', color: '#16a34a' },
+    { name: 'Strategy E', color: '#f59e0b' },
+    { name: 'Strategy F', color: '#e11d48' },
+    { name: 'Strategy G', color: '#64748b' },
+    { name: 'Strategy H', color: '#ec4899' },
   ],
 };
 
@@ -72,8 +72,8 @@ export function generateMockConversation(turnCount = 20, id = 'conv-1'): Convers
       id: `${id}-msg-${i}`,
       speaker: isUser ? 'user' : 'assistant',
       content: isUser
-        ? `User turn ${i + 1}: Exploring the theme of ${d1.name.toLowerCase()} support.`
-        : `Assistant turn ${i + 1}: Responding with a ${role.name.toLowerCase()} approach using ${d3.name.toLowerCase()}.`,
+        ? `User turn ${i + 1}: Exploring theme ${d1.name}.`
+        : `Assistant turn ${i + 1}: Responding as ${role.name} using ${d3.name}.`,
       role: role.name,
       timestamp: new Date(Date.now() + i * 30000).toISOString(),
       metadata: {

@@ -76,7 +76,7 @@ export const CalibrationSuite: React.FC = () => {
                         messages={MOCK_SEQUENCE_TURNS.map(t => ({
                           id: `t-${t.idx}`,
                           speaker: t.d2 === 'Seeker' ? 'user' : 'assistant',
-                          role: t.d2 === 'Seeker' ? undefined : (t.d2 === 'Advisor' || t.d2 === 'Listener' || t.d2 === 'Coach' || t.d2 === 'Navigator' || t.d2 === 'Companion' ? t.d2 : undefined),
+                          role: t.d2 === 'Seeker' ? undefined : t.d2,
                           content: t.text
                         }))} 
                       />

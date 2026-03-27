@@ -81,15 +81,15 @@ export const InteractionCartography: React.FC = () => {
   }, [toggles]);
 
   const supportDist = [
-    { label: 'Emotional', count: 12, color: colorFor(DEFAULT_TAXONOMY, 'd1', 'Emotional') },
-    { label: 'Informational', count: 8, color: colorFor(DEFAULT_TAXONOMY, 'd1', 'Informational') },
-    { label: 'Esteem', count: 4, color: colorFor(DEFAULT_TAXONOMY, 'd1', 'Esteem') },
+    { label: 'Type A', count: 12, color: colorFor(DEFAULT_TAXONOMY, 'd1', 'Type A') },
+    { label: 'Type B', count: 8, color: colorFor(DEFAULT_TAXONOMY, 'd1', 'Type B') },
+    { label: 'Type D', count: 4, color: colorFor(DEFAULT_TAXONOMY, 'd1', 'Type D') },
   ];
 
   const strategyDist = [
-    { label: 'Validation', count: 10, color: colorFor(DEFAULT_TAXONOMY, 'd3', 'Validation') },
-    { label: 'Question', count: 6, color: colorFor(DEFAULT_TAXONOMY, 'd3', 'Question') },
-    { label: 'Affirmation', count: 5, color: colorFor(DEFAULT_TAXONOMY, 'd3', 'Affirmation') },
+    { label: 'Strategy B', count: 10, color: colorFor(DEFAULT_TAXONOMY, 'd3', 'Strategy B') },
+    { label: 'Strategy A', count: 6, color: colorFor(DEFAULT_TAXONOMY, 'd3', 'Strategy A') },
+    { label: 'Strategy D', count: 5, color: colorFor(DEFAULT_TAXONOMY, 'd3', 'Strategy D') },
   ];
 
   return (
@@ -238,7 +238,7 @@ export const InteractionCartography: React.FC = () => {
             <KPIGrid 
               columns={2}
               items={[
-                { label: 'Primary Feature', value: 'Listener', color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Listener') },
+                { label: 'Primary Feature', value: 'Role 01', color: colorFor(DEFAULT_TAXONOMY, 'd2', 'Role 01') },
                 { label: 'Complexity Score', value: 'Low', color: '#22c55e' },
                 { label: 'Sequence Shifts', value: '3', color: '#6366f1' },
                 { label: 'Focus Share', value: '85%', color: '#f59e0b' }
